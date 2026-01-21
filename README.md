@@ -718,6 +718,7 @@ pytest ui/backend/tests # Run backend tests
 
 ---
 
+**Repository**: https://github.com/kaustavpaul107355/discount-tire-demo  
 **Last Updated**: January 21, 2026  
 **Version**: 2.0 (Optimized)  
 **Status**: Production Ready ✅

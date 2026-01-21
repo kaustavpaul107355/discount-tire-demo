@@ -4,8 +4,8 @@
 
 **Date**: January 21, 2026  
 **Branch**: main  
-**Commit**: 450ed4e  
-**Repository**: https://github.com/kaustavpaul107355/databricks-starter
+**Commit**: ea4321b  
+**Repository**: https://github.com/kaustavpaul107355/discount-tire-demo
 
 ---
 
@@ -112,10 +112,10 @@
 
 ## 🔗 Important Links
 
-- **GitHub Repository**: https://github.com/kaustavpaul107355/databricks-starter
+- **GitHub Repository**: https://github.com/kaustavpaul107355/discount-tire-demo
 - **Deployed App**: https://dtc-exec-view-app-1444828305810485.aws.databricksapps.com
 - **Databricks Workspace**: https://e2-demo-field-eng.cloud.databricks.com
-- **Latest Commit**: 450ed4e
+- **Latest Commit**: ea4321b
 
 ---
 
