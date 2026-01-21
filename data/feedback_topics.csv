@@ -1,0 +1,901 @@
+feedback_id,customer_id,feedback_date,topic,sentiment,mentions
+5001,166,2025-02-04,Product Selection,positive,3
+5002,109,2025-03-25,Service Quality,positive,1
+5003,439,2025-07-11,Wait Time,positive,1
+5004,325,2025-05-13,Staff Friendliness,negative,3
+5005,380,2025-02-22,Staff Friendliness,neutral,2
+5006,429,2025-05-14,Staff Friendliness,positive,2
+5007,155,2025-11-04,Product Selection,neutral,1
+5008,236,2025-11-24,Service Quality,positive,3
+5009,217,2025-08-14,Product Selection,negative,1
+5010,447,2025-06-23,Staff Friendliness,neutral,3
+5011,133,2025-11-03,Wait Time,positive,1
+5012,400,2025-10-01,Pricing,positive,2
+5013,231,2025-03-17,Product Selection,neutral,1
+5014,349,2025-08-20,Wait Time,neutral,3
+5015,140,2025-02-13,Wait Time,positive,1
+5016,125,2025-09-20,Service Quality,positive,1
+5017,221,2025-10-11,Pricing,negative,2
+5018,415,2025-02-07,Service Quality,neutral,2
+5019,126,2025-01-19,Staff Friendliness,positive,3
+5020,216,2025-02-23,Product Selection,positive,3
+5021,418,2025-07-01,Product Selection,positive,1
+5022,407,2025-02-26,Pricing,neutral,2
+5023,153,2025-09-10,Wait Time,positive,2
+5024,231,2025-08-21,Wait Time,positive,1
+5025,184,2025-05-29,Service Quality,positive,1
+5026,174,2025-07-12,Service Quality,positive,3
+5027,265,2025-11-27,Pricing,positive,2
+5028,199,2025-01-01,Wait Time,neutral,3
+5029,377,2025-05-29,Wait Time,positive,2
+5030,255,2025-01-10,Staff Friendliness,negative,2
+5031,358,2025-11-03,Product Selection,positive,3
+5032,270,2025-01-11,Service Quality,positive,1
+5033,106,2025-07-13,Pricing,neutral,3
+5034,279,2025-06-10,Service Quality,neutral,1
+5035,450,2025-11-16,Staff Friendliness,positive,3
+5036,194,2025-12-03,Staff Friendliness,positive,1
+5037,182,2025-08-01,Product Selection,neutral,1
+5038,238,2025-09-12,Wait Time,positive,2
+5039,264,2025-07-03,Wait Time,positive,3
+5040,179,2025-07-24,Service Quality,positive,2
+5041,378,2025-11-06,Service Quality,positive,1
+5042,115,2025-03-22,Pricing,positive,1
+5043,404,2025-06-15,Pricing,positive,2
+5044,212,2025-06-12,Service Quality,positive,2
+5045,441,2025-08-12,Product Selection,positive,1
+5046,338,2025-03-30,Wait Time,neutral,3
+5047,252,2025-07-13,Wait Time,positive,1
+5048,272,2025-01-14,Pricing,neutral,3
+5049,443,2025-04-10,Product Selection,positive,1
+5050,155,2025-01-21,Wait Time,neutral,1
+5051,240,2025-04-25,Product Selection,positive,3
+5052,181,2025-02-12,Service Quality,neutral,1
+5053,178,2025-03-30,Service Quality,negative,1
+5054,291,2025-02-27,Pricing,positive,3
+5055,291,2025-08-11,Product Selection,positive,3
+5056,314,2025-07-25,Product Selection,positive,2
+5057,105,2025-02-26,Service Quality,neutral,3
+5058,268,2025-01-30,Pricing,positive,2
+5059,259,2025-12-11,Pricing,neutral,1
+5060,122,2025-09-15,Staff Friendliness,positive,2
+5061,327,2025-06-10,Product Selection,positive,3
+5062,268,2025-05-25,Staff Friendliness,neutral,2
+5063,260,2025-03-08,Service Quality,positive,1
+5064,252,2025-03-14,Wait Time,positive,3
+5065,324,2025-04-09,Wait Time,positive,1
+5066,109,2025-01-24,Pricing,neutral,2
+5067,184,2025-04-22,Product Selection,positive,1
+5068,245,2025-10-18,Staff Friendliness,negative,3
+5069,158,2025-11-11,Service Quality,positive,2
+5070,179,2025-11-01,Staff Friendliness,positive,3
+5071,243,2025-02-19,Product Selection,neutral,3
+5072,183,2025-02-26,Product Selection,neutral,3
+5073,382,2025-08-10,Service Quality,positive,2
+5074,310,2025-03-28,Service Quality,neutral,3
+5075,102,2025-04-11,Service Quality,positive,3
+5076,183,2025-10-06,Product Selection,positive,2
+5077,197,2025-11-20,Service Quality,positive,1
+5078,268,2025-09-29,Wait Time,positive,1
+5079,382,2025-10-11,Service Quality,negative,3
+5080,183,2025-11-12,Staff Friendliness,neutral,1
+5081,438,2025-02-01,Product Selection,neutral,1
+5082,331,2025-08-10,Staff Friendliness,positive,1
+5083,335,2025-04-27,Staff Friendliness,negative,1
+5084,385,2025-09-14,Wait Time,negative,3
+5085,298,2025-09-05,Wait Time,positive,2
+5086,143,2025-02-28,Product Selection,positive,3
+5087,378,2025-08-21,Staff Friendliness,positive,1
+5088,227,2025-02-25,Staff Friendliness,positive,1
+5089,139,2025-09-16,Wait Time,positive,1
+5090,203,2025-03-20,Wait Time,neutral,1
+5091,445,2025-04-25,Product Selection,neutral,2
+5092,196,2025-02-02,Staff Friendliness,neutral,3
+5093,345,2025-12-25,Pricing,neutral,1
+5094,308,2025-02-18,Staff Friendliness,positive,3
+5095,123,2025-07-09,Staff Friendliness,neutral,3
+5096,186,2025-10-03,Service Quality,neutral,3
+5097,152,2025-02-08,Pricing,positive,3
+5098,166,2025-07-29,Staff Friendliness,neutral,1
+5099,336,2025-06-30,Product Selection,neutral,3
+5100,315,2025-11-26,Product Selection,negative,1
+5101,378,2025-09-12,Pricing,positive,1
+5102,446,2025-03-19,Service Quality,negative,3
+5103,301,2025-07-24,Staff Friendliness,positive,3
+5104,297,2025-07-01,Wait Time,neutral,3
+5105,149,2025-04-15,Wait Time,positive,2
+5106,416,2025-03-25,Product Selection,positive,2
+5107,267,2025-12-10,Wait Time,neutral,2
+5108,422,2025-06-02,Service Quality,neutral,1
+5109,397,2025-05-18,Product Selection,positive,3
+5110,344,2025-07-30,Wait Time,neutral,2
+5111,403,2025-08-13,Pricing,positive,3
+5112,417,2025-10-15,Staff Friendliness,positive,1
+5113,384,2025-12-18,Product Selection,positive,3
+5114,355,2025-12-18,Pricing,positive,3
+5115,393,2025-02-08,Pricing,positive,3
+5116,200,2025-06-04,Product Selection,neutral,1
+5117,311,2025-08-23,Staff Friendliness,positive,3
+5118,423,2025-10-25,Pricing,positive,3
+5119,374,2025-05-30,Service Quality,negative,3
+5120,374,2025-06-11,Service Quality,positive,1
+5121,410,2025-09-21,Wait Time,neutral,2
+5122,106,2025-03-02,Pricing,negative,1
+5123,184,2025-08-23,Staff Friendliness,positive,1
+5124,304,2025-11-05,Staff Friendliness,positive,1
+5125,110,2025-10-01,Product Selection,positive,2
+5126,284,2025-04-24,Product Selection,positive,1
+5127,385,2025-04-08,Product Selection,positive,3
+5128,122,2025-12-08,Pricing,positive,3
+5129,383,2025-08-31,Wait Time,neutral,2
+5130,155,2025-05-02,Product Selection,positive,1
+5131,177,2025-01-07,Staff Friendliness,neutral,1
+5132,101,2025-06-26,Wait Time,positive,3
+5133,300,2025-11-02,Staff Friendliness,positive,2
+5134,431,2025-07-03,Wait Time,positive,2
+5135,250,2025-10-17,Service Quality,positive,1
+5136,325,2025-05-31,Product Selection,neutral,2
+5137,330,2025-09-03,Product Selection,positive,3
+5138,110,2025-03-24,Service Quality,positive,2
+5139,430,2025-11-20,Service Quality,positive,1
+5140,319,2025-03-04,Pricing,negative,1
+5141,219,2025-06-05,Pricing,negative,2
+5142,168,2025-01-23,Product Selection,positive,2
+5143,348,2025-08-05,Pricing,neutral,3
+5144,306,2025-01-20,Pricing,positive,2
+5145,173,2025-06-26,Wait Time,positive,3
+5146,406,2025-03-12,Staff Friendliness,negative,2
+5147,318,2025-04-03,Wait Time,positive,1
+5148,412,2025-04-21,Service Quality,positive,3
+5149,432,2025-01-16,Pricing,positive,2
+5150,356,2025-07-19,Pricing,positive,2
+5151,378,2025-06-16,Pricing,neutral,2
+5152,406,2025-06-17,Wait Time,neutral,1
+5153,150,2025-06-10,Wait Time,positive,1
+5154,351,2025-05-28,Service Quality,negative,2
+5155,279,2025-12-26,Wait Time,positive,3
+5156,129,2025-07-21,Service Quality,neutral,1
+5157,438,2025-02-04,Wait Time,negative,3
+5158,342,2025-11-24,Wait Time,negative,1
+5159,425,2025-08-06,Staff Friendliness,positive,2
+5160,375,2025-11-13,Product Selection,neutral,2
+5161,385,2025-06-14,Pricing,neutral,3
+5162,267,2025-12-09,Wait Time,positive,2
+5163,188,2025-06-10,Pricing,positive,1
+5164,308,2025-06-17,Service Quality,negative,2
+5165,289,2025-02-04,Product Selection,positive,1
+5166,273,2025-11-23,Service Quality,positive,1
+5167,286,2025-05-13,Pricing,positive,2
+5168,333,2025-04-28,Pricing,positive,2
+5169,427,2025-03-14,Wait Time,positive,2
+5170,325,2025-06-01,Product Selection,neutral,1
+5171,337,2025-06-03,Service Quality,positive,3
+5172,393,2025-05-29,Staff Friendliness,positive,3
+5173,205,2025-09-08,Service Quality,positive,3
+5174,374,2025-03-05,Service Quality,positive,3
+5175,212,2025-02-05,Staff Friendliness,positive,3
+5176,203,2025-09-24,Wait Time,neutral,3
+5177,194,2025-09-20,Staff Friendliness,negative,2
+5178,360,2025-10-13,Product Selection,negative,1
+5179,281,2025-09-01,Wait Time,positive,1
+5180,105,2025-08-11,Pricing,neutral,1
+5181,262,2025-03-04,Service Quality,positive,2
+5182,257,2025-12-05,Staff Friendliness,positive,1
+5183,268,2025-09-20,Wait Time,positive,1
+5184,152,2025-02-24,Product Selection,positive,2
+5185,318,2025-05-23,Staff Friendliness,positive,2
+5186,355,2025-08-15,Service Quality,neutral,3
+5187,294,2025-07-23,Wait Time,positive,3
+5188,134,2025-07-22,Pricing,positive,1
+5189,401,2025-07-12,Product Selection,positive,3
+5190,321,2025-06-24,Pricing,negative,1
+5191,413,2025-01-15,Product Selection,positive,3
+5192,119,2025-11-01,Service Quality,positive,3
+5193,275,2025-01-09,Staff Friendliness,positive,3
+5194,220,2025-12-27,Pricing,positive,1
+5195,377,2025-09-25,Product Selection,positive,2
+5196,248,2025-07-19,Wait Time,neutral,2
+5197,364,2025-12-10,Product Selection,positive,3
+5198,335,2025-03-29,Product Selection,positive,3
+5199,290,2025-12-30,Staff Friendliness,positive,3
+5200,279,2025-09-23,Product Selection,positive,3
+5201,157,2025-03-15,Product Selection,positive,1
+5202,326,2025-10-03,Product Selection,positive,3
+5203,439,2025-06-03,Service Quality,neutral,3
+5204,377,2025-08-20,Wait Time,neutral,1
+5205,337,2025-10-25,Service Quality,negative,3
+5206,254,2025-02-20,Pricing,negative,2
+5207,206,2025-03-23,Staff Friendliness,positive,3
+5208,301,2025-04-04,Product Selection,positive,3
+5209,212,2025-09-15,Service Quality,positive,2
+5210,323,2025-02-11,Product Selection,positive,3
+5211,226,2025-09-09,Product Selection,negative,3
+5212,141,2025-06-22,Pricing,negative,3
+5213,106,2025-11-13,Service Quality,neutral,3
+5214,394,2025-08-16,Wait Time,neutral,2
+5215,396,2025-03-17,Service Quality,positive,3
+5216,318,2025-04-24,Staff Friendliness,positive,2
+5217,146,2025-10-03,Pricing,neutral,1
+5218,338,2025-12-09,Service Quality,neutral,2
+5219,200,2025-01-11,Wait Time,neutral,3
+5220,163,2025-10-27,Service Quality,positive,1
+5221,106,2025-09-30,Wait Time,negative,1
+5222,394,2025-11-27,Staff Friendliness,positive,2
+5223,279,2025-08-07,Service Quality,positive,1
+5224,394,2025-06-17,Service Quality,neutral,3
+5225,152,2025-01-22,Product Selection,neutral,2
+5226,268,2025-06-03,Service Quality,negative,1
+5227,337,2025-06-25,Wait Time,positive,3
+5228,372,2025-07-25,Staff Friendliness,positive,1
+5229,326,2025-06-28,Service Quality,positive,3
+5230,407,2025-04-18,Staff Friendliness,positive,2
+5231,224,2025-01-04,Product Selection,positive,3
+5232,271,2025-08-09,Product Selection,positive,1
+5233,288,2025-05-07,Pricing,positive,1
+5234,434,2025-07-12,Pricing,negative,1
+5235,400,2025-07-02,Staff Friendliness,positive,2
+5236,160,2025-05-07,Service Quality,positive,2
+5237,448,2025-03-10,Product Selection,positive,3
+5238,223,2025-08-22,Staff Friendliness,positive,1
+5239,182,2025-11-29,Product Selection,positive,2
+5240,310,2025-05-08,Service Quality,positive,2
+5241,191,2025-05-11,Product Selection,positive,2
+5242,136,2025-02-23,Staff Friendliness,positive,3
+5243,337,2025-04-15,Pricing,neutral,2
+5244,375,2025-05-16,Pricing,positive,1
+5245,292,2025-12-09,Service Quality,positive,3
+5246,380,2025-04-20,Service Quality,positive,1
+5247,236,2025-04-17,Wait Time,positive,2
+5248,169,2025-05-15,Product Selection,negative,3
+5249,233,2025-09-28,Pricing,positive,3
+5250,218,2025-04-19,Product Selection,positive,1
+5251,395,2025-01-23,Staff Friendliness,positive,2
+5252,354,2025-12-04,Staff Friendliness,positive,3
+5253,421,2025-03-30,Service Quality,positive,3
+5254,375,2025-09-18,Pricing,negative,2
+5255,239,2025-06-29,Pricing,neutral,1
+5256,222,2025-08-21,Pricing,positive,1
+5257,352,2025-04-11,Service Quality,positive,1
+5258,429,2025-10-14,Staff Friendliness,neutral,1
+5259,155,2025-05-19,Staff Friendliness,neutral,3
+5260,118,2025-04-17,Wait Time,positive,3
+5261,358,2025-09-17,Product Selection,negative,2
+5262,206,2025-11-30,Product Selection,positive,3
+5263,284,2025-04-30,Product Selection,positive,1
+5264,308,2025-08-19,Pricing,neutral,1
+5265,229,2025-01-05,Service Quality,positive,3
+5266,107,2025-06-28,Product Selection,negative,1
+5267,363,2025-04-06,Staff Friendliness,negative,3
+5268,166,2025-05-16,Staff Friendliness,positive,1
+5269,121,2025-03-29,Pricing,positive,1
+5270,144,2025-12-01,Product Selection,positive,2
+5271,331,2025-05-18,Staff Friendliness,positive,2
+5272,134,2025-12-20,Service Quality,positive,2
+5273,403,2025-04-21,Pricing,positive,1
+5274,239,2025-05-03,Pricing,negative,3
+5275,430,2025-09-05,Service Quality,positive,3
+5276,416,2025-11-21,Pricing,positive,1
+5277,174,2025-08-27,Pricing,positive,1
+5278,401,2025-07-19,Product Selection,positive,2
+5279,395,2025-04-01,Staff Friendliness,positive,2
+5280,141,2025-03-15,Staff Friendliness,neutral,1
+5281,249,2025-12-22,Service Quality,positive,3
+5282,445,2025-02-21,Wait Time,positive,1
+5283,374,2025-04-09,Product Selection,positive,2
+5284,296,2025-12-19,Product Selection,positive,2
+5285,211,2025-03-18,Service Quality,positive,3
+5286,305,2025-03-28,Staff Friendliness,neutral,1
+5287,178,2025-06-21,Service Quality,positive,1
+5288,301,2025-02-05,Staff Friendliness,neutral,3
+5289,285,2025-10-06,Wait Time,positive,3
+5290,116,2025-09-01,Service Quality,positive,3
+5291,261,2025-09-11,Service Quality,positive,1
+5292,170,2025-10-16,Pricing,negative,1
+5293,114,2025-08-25,Staff Friendliness,positive,1
+5294,198,2025-03-29,Service Quality,neutral,1
+5295,148,2025-07-14,Service Quality,positive,3
+5296,122,2025-02-08,Product Selection,positive,3
+5297,300,2025-03-03,Staff Friendliness,positive,1
+5298,230,2025-12-30,Pricing,negative,2
+5299,309,2025-02-26,Service Quality,negative,3
+5300,186,2025-02-05,Product Selection,neutral,2
+5301,104,2025-05-06,Staff Friendliness,positive,2
+5302,128,2025-06-04,Wait Time,neutral,2
+5303,168,2025-02-17,Wait Time,positive,3
+5304,304,2025-04-03,Service Quality,positive,1
+5305,401,2025-03-14,Pricing,neutral,3
+5306,441,2025-06-06,Service Quality,positive,3
+5307,329,2025-07-12,Staff Friendliness,negative,3
+5308,112,2025-08-04,Wait Time,neutral,3
+5309,421,2025-04-26,Pricing,positive,1
+5310,341,2025-08-27,Staff Friendliness,positive,3
+5311,254,2025-12-13,Product Selection,positive,1
+5312,239,2025-07-03,Pricing,neutral,3
+5313,377,2025-01-19,Pricing,positive,1
+5314,155,2025-02-26,Service Quality,positive,2
+5315,375,2025-02-16,Product Selection,negative,1
+5316,321,2025-12-26,Product Selection,negative,2
+5317,411,2025-05-11,Product Selection,negative,2
+5318,385,2025-09-21,Staff Friendliness,neutral,3
+5319,316,2025-07-14,Wait Time,positive,1
+5320,105,2025-06-09,Product Selection,positive,2
+5321,233,2025-04-29,Service Quality,positive,2
+5322,437,2025-10-17,Product Selection,negative,1
+5323,393,2025-11-14,Service Quality,positive,3
+5324,167,2025-01-23,Service Quality,positive,1
+5325,307,2025-09-28,Product Selection,neutral,1
+5326,302,2025-11-17,Product Selection,negative,1
+5327,202,2025-05-23,Pricing,negative,3
+5328,238,2025-08-18,Product Selection,positive,1
+5329,359,2025-10-21,Wait Time,positive,3
+5330,311,2025-04-06,Pricing,positive,1
+5331,105,2025-03-27,Wait Time,positive,1
+5332,352,2025-07-03,Wait Time,negative,2
+5333,101,2025-01-02,Wait Time,neutral,1
+5334,111,2025-07-12,Service Quality,positive,1
+5335,250,2025-10-31,Staff Friendliness,positive,1
+5336,414,2025-09-24,Service Quality,positive,3
+5337,391,2025-03-02,Service Quality,positive,2
+5338,102,2025-02-17,Service Quality,positive,2
+5339,391,2025-03-13,Wait Time,neutral,3
+5340,354,2025-10-25,Wait Time,negative,3
+5341,373,2025-11-13,Product Selection,neutral,1
+5342,299,2025-06-22,Service Quality,positive,2
+5343,379,2025-10-08,Service Quality,negative,2
+5344,346,2025-01-21,Pricing,positive,1
+5345,112,2025-10-29,Product Selection,neutral,3
+5346,242,2025-03-02,Wait Time,positive,1
+5347,226,2025-02-19,Staff Friendliness,positive,3
+5348,144,2025-11-06,Pricing,positive,3
+5349,431,2025-06-18,Pricing,neutral,3
+5350,173,2025-06-08,Product Selection,negative,1
+5351,110,2025-12-07,Wait Time,neutral,1
+5352,136,2025-05-03,Pricing,positive,2
+5353,312,2025-06-14,Staff Friendliness,positive,2
+5354,395,2025-05-26,Product Selection,positive,3
+5355,240,2025-03-17,Staff Friendliness,positive,3
+5356,128,2025-03-12,Service Quality,positive,2
+5357,430,2025-12-28,Service Quality,neutral,3
+5358,147,2025-03-12,Product Selection,positive,3
+5359,214,2025-05-28,Product Selection,positive,1
+5360,177,2025-09-29,Staff Friendliness,positive,2
+5361,357,2025-12-19,Service Quality,positive,2
+5362,170,2025-07-03,Staff Friendliness,positive,3
+5363,199,2025-04-24,Staff Friendliness,positive,2
+5364,333,2025-02-14,Service Quality,positive,1
+5365,418,2025-10-14,Service Quality,negative,1
+5366,383,2025-03-01,Pricing,positive,3
+5367,315,2025-11-20,Service Quality,neutral,2
+5368,278,2025-12-07,Product Selection,positive,2
+5369,159,2025-11-05,Service Quality,positive,1
+5370,213,2025-07-29,Service Quality,positive,1
+5371,128,2025-05-05,Service Quality,positive,3
+5372,174,2025-02-15,Staff Friendliness,positive,3
+5373,190,2025-03-07,Wait Time,negative,3
+5374,422,2025-02-15,Staff Friendliness,positive,1
+5375,116,2025-07-11,Pricing,negative,1
+5376,355,2025-06-16,Staff Friendliness,positive,1
+5377,233,2025-01-24,Pricing,positive,2
+5378,436,2025-08-14,Wait Time,negative,2
+5379,213,2025-01-13,Pricing,positive,1
+5380,419,2025-01-04,Service Quality,positive,2
+5381,356,2025-06-08,Wait Time,negative,2
+5382,177,2025-10-13,Pricing,positive,2
+5383,143,2025-10-01,Staff Friendliness,negative,1
+5384,184,2025-12-14,Pricing,neutral,1
+5385,335,2025-01-02,Wait Time,positive,3
+5386,301,2025-07-18,Staff Friendliness,neutral,2
+5387,305,2025-05-22,Wait Time,negative,1
+5388,419,2025-07-29,Staff Friendliness,negative,3
+5389,327,2025-05-19,Product Selection,negative,3
+5390,251,2025-02-11,Staff Friendliness,positive,3
+5391,182,2025-04-17,Product Selection,positive,2
+5392,108,2025-02-25,Service Quality,positive,3
+5393,256,2025-06-04,Product Selection,positive,1
+5394,165,2025-05-20,Wait Time,positive,1
+5395,258,2025-08-03,Service Quality,positive,3
+5396,294,2025-02-26,Product Selection,positive,1
+5397,145,2025-08-10,Pricing,neutral,2
+5398,410,2025-05-12,Pricing,positive,3
+5399,189,2025-12-04,Service Quality,negative,3
+5400,242,2025-02-15,Pricing,neutral,1
+5401,152,2025-04-11,Product Selection,positive,3
+5402,382,2025-08-26,Service Quality,positive,1
+5403,102,2025-04-26,Staff Friendliness,positive,2
+5404,447,2025-09-14,Product Selection,neutral,3
+5405,192,2025-05-22,Service Quality,positive,3
+5406,315,2025-07-27,Product Selection,positive,2
+5407,233,2025-02-20,Service Quality,positive,1
+5408,123,2025-07-09,Wait Time,positive,2
+5409,201,2025-04-06,Pricing,positive,1
+5410,116,2025-01-27,Service Quality,neutral,2
+5411,413,2025-05-03,Product Selection,positive,2
+5412,173,2025-11-25,Service Quality,neutral,3
+5413,298,2025-04-14,Service Quality,negative,1
+5414,132,2025-08-17,Wait Time,positive,3
+5415,404,2025-01-26,Product Selection,neutral,1
+5416,146,2025-01-07,Pricing,positive,1
+5417,253,2025-05-04,Staff Friendliness,neutral,1
+5418,355,2025-08-27,Service Quality,positive,3
+5419,385,2025-02-23,Staff Friendliness,positive,3
+5420,299,2025-07-01,Wait Time,neutral,3
+5421,416,2025-05-13,Service Quality,neutral,1
+5422,398,2025-11-22,Pricing,neutral,2
+5423,369,2025-01-05,Pricing,negative,3
+5424,162,2025-08-13,Service Quality,positive,2
+5425,215,2025-12-28,Pricing,positive,1
+5426,112,2025-10-13,Staff Friendliness,negative,3
+5427,447,2025-01-02,Staff Friendliness,positive,2
+5428,171,2025-01-29,Staff Friendliness,positive,3
+5429,217,2025-08-01,Staff Friendliness,positive,1
+5430,319,2025-09-20,Service Quality,positive,1
+5431,416,2025-03-21,Staff Friendliness,negative,1
+5432,204,2025-10-29,Product Selection,negative,3
+5433,297,2025-03-03,Pricing,positive,3
+5434,202,2025-04-27,Staff Friendliness,positive,1
+5435,330,2025-02-24,Staff Friendliness,positive,1
+5436,194,2025-12-11,Pricing,positive,3
+5437,382,2025-08-27,Pricing,neutral,3
+5438,117,2025-05-12,Service Quality,positive,3
+5439,251,2025-03-11,Wait Time,neutral,1
+5440,303,2025-03-04,Wait Time,positive,2
+5441,400,2025-07-16,Service Quality,neutral,3
+5442,443,2025-08-22,Staff Friendliness,positive,2
+5443,304,2025-08-15,Staff Friendliness,positive,3
+5444,450,2025-11-14,Pricing,positive,3
+5445,161,2025-07-06,Wait Time,positive,3
+5446,173,2025-03-01,Service Quality,positive,2
+5447,253,2025-01-03,Wait Time,positive,2
+5448,105,2025-01-24,Wait Time,positive,3
+5449,368,2025-03-22,Pricing,negative,2
+5450,209,2025-04-24,Service Quality,neutral,3
+5451,171,2025-05-30,Pricing,positive,3
+5452,134,2025-06-04,Wait Time,positive,1
+5453,318,2025-02-08,Product Selection,neutral,1
+5454,262,2025-02-21,Wait Time,positive,2
+5455,137,2025-07-06,Staff Friendliness,positive,3
+5456,382,2025-07-26,Staff Friendliness,neutral,3
+5457,226,2025-11-11,Wait Time,neutral,2
+5458,220,2025-02-17,Pricing,positive,1
+5459,267,2025-05-22,Service Quality,neutral,2
+5460,316,2025-03-21,Pricing,neutral,2
+5461,359,2025-03-04,Product Selection,neutral,2
+5462,342,2025-06-14,Wait Time,positive,3
+5463,157,2025-02-09,Wait Time,positive,2
+5464,353,2025-03-10,Pricing,neutral,1
+5465,404,2025-09-12,Pricing,neutral,3
+5466,151,2025-03-21,Pricing,positive,2
+5467,428,2025-11-03,Service Quality,neutral,2
+5468,183,2025-01-10,Wait Time,neutral,1
+5469,252,2025-07-09,Pricing,positive,2
+5470,317,2025-01-19,Staff Friendliness,positive,2
+5471,134,2025-08-24,Staff Friendliness,positive,1
+5472,132,2025-07-05,Product Selection,positive,2
+5473,235,2025-11-25,Staff Friendliness,positive,1
+5474,347,2025-09-07,Service Quality,positive,2
+5475,258,2025-04-06,Wait Time,positive,2
+5476,252,2025-09-15,Service Quality,neutral,2
+5477,336,2025-03-24,Wait Time,positive,3
+5478,189,2025-07-21,Pricing,positive,3
+5479,371,2025-08-19,Staff Friendliness,negative,1
+5480,385,2025-01-24,Product Selection,neutral,2
+5481,314,2025-01-06,Staff Friendliness,positive,2
+5482,435,2025-03-15,Staff Friendliness,neutral,2
+5483,135,2025-04-17,Wait Time,negative,3
+5484,381,2025-12-21,Staff Friendliness,positive,1
+5485,284,2025-09-28,Product Selection,positive,2
+5486,359,2025-07-28,Staff Friendliness,neutral,3
+5487,116,2025-09-25,Pricing,positive,2
+5488,403,2025-12-22,Wait Time,positive,2
+5489,290,2025-06-27,Wait Time,positive,1
+5490,369,2025-08-31,Product Selection,neutral,1
+5491,396,2025-06-17,Staff Friendliness,neutral,3
+5492,331,2025-01-05,Staff Friendliness,negative,2
+5493,199,2025-01-30,Pricing,positive,3
+5494,343,2025-08-26,Product Selection,positive,2
+5495,274,2025-08-12,Pricing,positive,1
+5496,401,2025-09-27,Service Quality,positive,2
+5497,176,2025-07-26,Wait Time,positive,3
+5498,167,2025-04-03,Staff Friendliness,neutral,1
+5499,191,2025-03-17,Wait Time,negative,2
+5500,153,2025-08-26,Service Quality,neutral,2
+5501,434,2025-03-03,Staff Friendliness,positive,2
+5502,155,2025-05-31,Staff Friendliness,positive,1
+5503,416,2025-05-28,Product Selection,positive,2
+5504,383,2025-04-30,Staff Friendliness,positive,1
+5505,292,2025-08-06,Wait Time,negative,3
+5506,105,2025-04-02,Wait Time,positive,1
+5507,116,2025-10-19,Wait Time,neutral,3
+5508,108,2025-05-17,Service Quality,negative,1
+5509,448,2025-02-09,Staff Friendliness,positive,1
+5510,317,2025-02-06,Product Selection,positive,2
+5511,338,2025-02-11,Service Quality,negative,2
+5512,200,2025-01-21,Staff Friendliness,negative,2
+5513,106,2025-04-12,Service Quality,positive,1
+5514,195,2025-04-04,Staff Friendliness,neutral,2
+5515,244,2025-02-27,Staff Friendliness,positive,2
+5516,182,2025-08-16,Product Selection,positive,2
+5517,224,2025-04-24,Product Selection,positive,3
+5518,117,2025-06-16,Staff Friendliness,neutral,2
+5519,132,2025-11-12,Wait Time,negative,3
+5520,414,2025-12-24,Product Selection,positive,3
+5521,213,2025-08-25,Product Selection,positive,3
+5522,181,2025-02-14,Staff Friendliness,positive,1
+5523,394,2025-04-24,Service Quality,neutral,2
+5524,434,2025-10-16,Service Quality,positive,2
+5525,131,2025-08-03,Wait Time,neutral,2
+5526,303,2025-08-21,Pricing,neutral,1
+5527,384,2025-04-16,Pricing,positive,3
+5528,351,2025-11-17,Pricing,neutral,3
+5529,292,2025-01-01,Service Quality,positive,3
+5530,380,2025-01-02,Staff Friendliness,positive,2
+5531,354,2025-01-12,Pricing,neutral,1
+5532,123,2025-02-22,Product Selection,positive,3
+5533,188,2025-04-06,Product Selection,positive,1
+5534,291,2025-05-02,Pricing,negative,3
+5535,117,2025-10-21,Pricing,positive,1
+5536,400,2025-03-22,Wait Time,positive,2
+5537,199,2025-01-04,Wait Time,positive,1
+5538,226,2025-03-20,Pricing,positive,2
+5539,434,2025-01-31,Pricing,positive,1
+5540,417,2025-05-26,Wait Time,negative,2
+5541,450,2025-07-27,Service Quality,positive,3
+5542,359,2025-05-26,Product Selection,neutral,3
+5543,207,2025-05-06,Product Selection,positive,1
+5544,184,2025-07-21,Pricing,neutral,1
+5545,404,2025-10-03,Staff Friendliness,positive,1
+5546,278,2025-10-03,Product Selection,neutral,3
+5547,219,2025-05-18,Service Quality,positive,2
+5548,147,2025-01-30,Wait Time,negative,2
+5549,271,2025-11-10,Product Selection,positive,3
+5550,415,2025-03-02,Wait Time,negative,1
+5551,225,2025-02-08,Staff Friendliness,positive,2
+5552,336,2025-05-23,Pricing,positive,1
+5553,134,2025-11-01,Service Quality,positive,2
+5554,429,2025-08-18,Service Quality,positive,2
+5555,419,2025-04-03,Service Quality,positive,2
+5556,329,2025-02-21,Service Quality,neutral,2
+5557,291,2025-03-07,Wait Time,neutral,2
+5558,241,2025-12-08,Staff Friendliness,positive,3
+5559,423,2025-02-22,Staff Friendliness,positive,1
+5560,114,2025-08-18,Product Selection,positive,1
+5561,114,2025-03-23,Service Quality,positive,3
+5562,373,2025-03-12,Pricing,positive,2
+5563,132,2025-02-24,Wait Time,positive,1
+5564,282,2025-07-01,Wait Time,negative,1
+5565,263,2025-03-13,Service Quality,positive,1
+5566,398,2025-12-08,Service Quality,positive,1
+5567,365,2025-10-30,Staff Friendliness,positive,2
+5568,427,2025-11-06,Wait Time,positive,1
+5569,292,2025-03-20,Pricing,negative,1
+5570,357,2025-05-11,Product Selection,positive,3
+5571,446,2025-10-04,Pricing,neutral,1
+5572,403,2025-01-04,Wait Time,neutral,2
+5573,378,2025-08-09,Staff Friendliness,positive,2
+5574,425,2025-04-12,Staff Friendliness,neutral,1
+5575,221,2025-10-13,Wait Time,positive,2
+5576,282,2025-11-13,Service Quality,positive,1
+5577,185,2025-10-05,Pricing,positive,3
+5578,249,2025-09-24,Staff Friendliness,positive,2
+5579,426,2025-07-03,Product Selection,neutral,3
+5580,370,2025-10-05,Product Selection,positive,1
+5581,265,2025-09-02,Staff Friendliness,neutral,1
+5582,308,2025-09-18,Wait Time,positive,2
+5583,304,2025-10-27,Staff Friendliness,positive,1
+5584,286,2025-11-23,Pricing,negative,2
+5585,292,2025-07-20,Service Quality,neutral,1
+5586,385,2025-06-29,Wait Time,positive,1
+5587,155,2025-12-06,Product Selection,positive,3
+5588,308,2025-06-03,Wait Time,neutral,2
+5589,189,2025-10-29,Product Selection,positive,2
+5590,193,2025-03-28,Service Quality,positive,1
+5591,226,2025-10-19,Pricing,positive,3
+5592,190,2025-01-07,Product Selection,positive,3
+5593,436,2025-12-22,Staff Friendliness,positive,2
+5594,121,2025-01-01,Wait Time,positive,2
+5595,276,2025-07-04,Service Quality,negative,2
+5596,200,2025-05-26,Wait Time,positive,3
+5597,121,2025-11-11,Service Quality,neutral,1
+5598,126,2025-05-06,Service Quality,positive,2
+5599,203,2025-03-10,Product Selection,neutral,1
+5600,253,2025-10-31,Staff Friendliness,positive,1
+5601,296,2025-08-03,Service Quality,neutral,1
+5602,371,2025-12-04,Wait Time,positive,1
+5603,265,2025-02-26,Staff Friendliness,positive,3
+5604,315,2025-08-12,Service Quality,positive,1
+5605,301,2025-09-27,Pricing,positive,3
+5606,282,2025-06-16,Service Quality,positive,1
+5607,338,2025-08-05,Wait Time,positive,1
+5608,328,2025-04-25,Staff Friendliness,neutral,3
+5609,157,2025-04-12,Wait Time,negative,2
+5610,159,2025-11-13,Service Quality,neutral,2
+5611,245,2025-06-03,Service Quality,negative,1
+5612,203,2025-05-22,Service Quality,positive,2
+5613,160,2025-08-26,Wait Time,positive,2
+5614,438,2025-09-02,Staff Friendliness,positive,2
+5615,117,2025-04-17,Staff Friendliness,negative,2
+5616,410,2025-01-24,Pricing,positive,2
+5617,320,2025-06-24,Service Quality,positive,1
+5618,362,2025-02-14,Product Selection,positive,2
+5619,418,2025-03-30,Product Selection,positive,2
+5620,194,2025-05-27,Service Quality,negative,3
+5621,213,2025-05-17,Staff Friendliness,positive,1
+5622,355,2025-06-26,Wait Time,positive,2
+5623,272,2025-07-19,Wait Time,positive,3
+5624,231,2025-01-06,Staff Friendliness,positive,1
+5625,284,2025-07-09,Pricing,neutral,3
+5626,216,2025-03-12,Staff Friendliness,neutral,2
+5627,387,2025-12-19,Product Selection,positive,2
+5628,189,2025-12-28,Wait Time,positive,2
+5629,133,2025-01-02,Service Quality,negative,3
+5630,274,2025-06-22,Wait Time,positive,3
+5631,261,2025-05-18,Staff Friendliness,neutral,1
+5632,147,2025-05-01,Staff Friendliness,neutral,2
+5633,403,2025-01-17,Product Selection,positive,3
+5634,213,2025-05-15,Staff Friendliness,positive,3
+5635,319,2025-11-28,Service Quality,positive,3
+5636,311,2025-08-22,Service Quality,positive,3
+5637,368,2025-08-23,Pricing,positive,1
+5638,303,2025-08-20,Staff Friendliness,positive,3
+5639,280,2025-08-01,Staff Friendliness,positive,2
+5640,168,2025-07-26,Staff Friendliness,neutral,3
+5641,135,2025-12-22,Pricing,neutral,1
+5642,366,2025-11-08,Pricing,neutral,3
+5643,118,2025-09-01,Service Quality,positive,3
+5644,186,2025-01-06,Product Selection,neutral,3
+5645,258,2025-08-21,Pricing,positive,3
+5646,388,2025-05-01,Staff Friendliness,positive,2
+5647,311,2025-01-19,Staff Friendliness,positive,1
+5648,227,2025-08-06,Staff Friendliness,positive,3
+5649,361,2025-07-22,Wait Time,positive,2
+5650,431,2025-01-12,Staff Friendliness,neutral,2
+5651,342,2025-03-11,Service Quality,positive,1
+5652,194,2025-09-01,Staff Friendliness,positive,3
+5653,429,2025-11-11,Pricing,neutral,1
+5654,363,2025-09-17,Staff Friendliness,positive,2
+5655,269,2025-06-18,Wait Time,positive,3
+5656,407,2025-04-16,Service Quality,positive,3
+5657,313,2025-03-28,Wait Time,positive,3
+5658,364,2025-09-15,Product Selection,negative,2
+5659,305,2025-06-11,Service Quality,neutral,3
+5660,266,2025-11-23,Service Quality,neutral,2
+5661,393,2025-03-02,Wait Time,positive,3
+5662,334,2025-10-15,Service Quality,positive,2
+5663,140,2025-12-16,Product Selection,negative,3
+5664,327,2025-04-16,Service Quality,positive,1
+5665,132,2025-03-25,Service Quality,positive,3
+5666,447,2025-10-25,Service Quality,positive,3
+5667,191,2025-02-11,Product Selection,neutral,3
+5668,391,2025-09-09,Product Selection,negative,1
+5669,388,2025-06-15,Wait Time,positive,1
+5670,220,2025-01-04,Staff Friendliness,positive,3
+5671,317,2025-03-29,Pricing,neutral,2
+5672,401,2025-04-16,Pricing,positive,3
+5673,403,2025-12-07,Product Selection,neutral,1
+5674,145,2025-06-04,Wait Time,negative,3
+5675,428,2025-02-27,Product Selection,neutral,2
+5676,284,2025-08-03,Product Selection,neutral,2
+5677,114,2025-02-02,Staff Friendliness,positive,3
+5678,275,2025-01-02,Product Selection,positive,2
+5679,233,2025-05-20,Product Selection,positive,1
+5680,388,2025-05-23,Product Selection,neutral,3
+5681,226,2025-12-22,Service Quality,neutral,3
+5682,139,2025-02-27,Staff Friendliness,neutral,2
+5683,342,2025-01-03,Product Selection,negative,2
+5684,425,2025-05-19,Staff Friendliness,negative,3
+5685,214,2025-11-27,Service Quality,positive,3
+5686,397,2025-11-30,Service Quality,positive,2
+5687,398,2025-12-01,Wait Time,negative,3
+5688,148,2025-08-18,Pricing,positive,1
+5689,159,2025-11-03,Staff Friendliness,positive,1
+5690,312,2025-01-25,Pricing,positive,1
+5691,116,2025-01-17,Product Selection,neutral,3
+5692,428,2025-07-25,Service Quality,positive,1
+5693,371,2025-08-01,Wait Time,neutral,3
+5694,190,2025-09-27,Pricing,neutral,2
+5695,116,2025-09-22,Service Quality,positive,3
+5696,438,2025-10-17,Product Selection,negative,1
+5697,429,2025-02-15,Staff Friendliness,neutral,1
+5698,315,2025-10-31,Product Selection,positive,3
+5699,158,2025-07-17,Product Selection,negative,1
+5700,188,2025-03-09,Staff Friendliness,positive,1
+5701,386,2025-01-09,Service Quality,positive,1
+5702,420,2025-11-22,Service Quality,positive,1
+5703,316,2025-05-16,Wait Time,neutral,2
+5704,238,2025-11-01,Wait Time,positive,2
+5705,423,2025-06-21,Wait Time,neutral,3
+5706,449,2025-02-11,Staff Friendliness,negative,1
+5707,106,2025-12-03,Pricing,neutral,1
+5708,253,2025-07-11,Wait Time,neutral,1
+5709,309,2025-02-16,Product Selection,positive,1
+5710,215,2025-01-05,Staff Friendliness,positive,1
+5711,383,2025-07-27,Pricing,positive,3
+5712,131,2025-11-29,Wait Time,neutral,2
+5713,101,2025-05-31,Wait Time,negative,1
+5714,293,2025-12-20,Pricing,positive,2
+5715,122,2025-12-24,Pricing,positive,2
+5716,231,2025-12-25,Product Selection,neutral,3
+5717,326,2025-05-23,Pricing,neutral,3
+5718,109,2025-12-26,Wait Time,negative,2
+5719,362,2025-06-30,Product Selection,positive,3
+5720,392,2025-05-08,Staff Friendliness,negative,3
+5721,290,2025-07-24,Pricing,negative,2
+5722,178,2025-04-29,Wait Time,negative,2
+5723,120,2025-08-26,Staff Friendliness,positive,3
+5724,420,2025-10-27,Product Selection,positive,1
+5725,167,2025-10-18,Pricing,positive,2
+5726,442,2025-01-26,Wait Time,positive,2
+5727,196,2025-04-05,Product Selection,positive,1
+5728,311,2025-01-06,Product Selection,neutral,2
+5729,314,2025-08-21,Staff Friendliness,positive,3
+5730,399,2025-06-26,Staff Friendliness,positive,2
+5731,413,2025-11-04,Product Selection,negative,3
+5732,180,2025-11-05,Product Selection,negative,3
+5733,381,2025-10-11,Wait Time,positive,3
+5734,345,2025-08-26,Staff Friendliness,positive,3
+5735,354,2025-07-10,Staff Friendliness,neutral,2
+5736,107,2025-05-11,Pricing,positive,3
+5737,189,2025-05-09,Service Quality,positive,3
+5738,227,2025-11-05,Service Quality,positive,3
+5739,198,2025-03-06,Product Selection,positive,2
+5740,106,2025-02-04,Service Quality,positive,2
+5741,253,2025-12-04,Service Quality,neutral,3
+5742,339,2025-11-12,Staff Friendliness,positive,3
+5743,135,2025-12-05,Pricing,neutral,1
+5744,118,2025-10-16,Pricing,neutral,1
+5745,212,2025-04-15,Pricing,positive,3
+5746,395,2025-11-22,Staff Friendliness,positive,3
+5747,341,2025-11-10,Wait Time,positive,3
+5748,323,2025-07-16,Pricing,neutral,2
+5749,182,2025-01-06,Wait Time,positive,2
+5750,418,2025-04-04,Wait Time,positive,1
+5751,273,2025-09-06,Wait Time,positive,2
+5752,320,2025-02-22,Product Selection,negative,3
+5753,234,2025-07-25,Product Selection,negative,1
+5754,392,2025-01-18,Product Selection,negative,3
+5755,290,2025-01-03,Staff Friendliness,positive,1
+5756,343,2025-01-02,Pricing,positive,2
+5757,416,2025-09-27,Staff Friendliness,positive,2
+5758,393,2025-03-20,Pricing,negative,3
+5759,429,2025-01-04,Pricing,neutral,2
+5760,227,2025-03-03,Pricing,positive,3
+5761,184,2025-02-07,Pricing,positive,3
+5762,200,2025-06-11,Staff Friendliness,neutral,2
+5763,150,2025-09-08,Service Quality,positive,2
+5764,201,2025-06-29,Wait Time,positive,1
+5765,216,2025-10-22,Staff Friendliness,positive,3
+5766,192,2025-06-20,Service Quality,positive,3
+5767,399,2025-10-30,Product Selection,neutral,1
+5768,365,2025-08-24,Staff Friendliness,positive,1
+5769,198,2025-05-31,Pricing,neutral,2
+5770,241,2025-11-08,Staff Friendliness,positive,1
+5771,239,2025-08-16,Staff Friendliness,positive,3
+5772,374,2025-04-26,Staff Friendliness,negative,2
+5773,134,2025-08-29,Service Quality,neutral,2
+5774,265,2025-11-08,Service Quality,neutral,1
+5775,342,2025-12-19,Service Quality,negative,3
+5776,283,2025-05-03,Service Quality,positive,3
+5777,186,2025-02-10,Product Selection,positive,2
+5778,281,2025-05-11,Staff Friendliness,positive,1
+5779,410,2025-07-01,Service Quality,positive,3
+5780,101,2025-02-10,Pricing,positive,3
+5781,149,2025-08-20,Pricing,negative,2
+5782,239,2025-07-07,Product Selection,positive,1
+5783,409,2025-01-25,Service Quality,negative,3
+5784,352,2025-05-26,Staff Friendliness,positive,1
+5785,401,2025-01-07,Wait Time,negative,3
+5786,260,2025-03-02,Pricing,negative,3
+5787,242,2025-05-08,Service Quality,negative,3
+5788,380,2025-10-04,Wait Time,positive,1
+5789,449,2025-07-21,Wait Time,positive,1
+5790,121,2025-10-06,Wait Time,positive,3
+5791,305,2025-12-22,Pricing,neutral,3
+5792,111,2025-01-07,Staff Friendliness,positive,1
+5793,301,2025-12-24,Pricing,positive,2
+5794,147,2025-08-12,Staff Friendliness,positive,3
+5795,408,2025-05-02,Wait Time,negative,2
+5796,314,2025-04-08,Wait Time,positive,3
+5797,340,2025-01-11,Pricing,positive,3
+5798,360,2025-08-10,Service Quality,neutral,2
+5799,122,2025-11-06,Product Selection,neutral,3
+5800,348,2025-01-22,Service Quality,positive,3
+5801,161,2025-02-17,Product Selection,neutral,3
+5802,423,2025-02-10,Pricing,negative,1
+5803,203,2025-07-13,Wait Time,neutral,1
+5804,150,2025-10-11,Pricing,positive,2
+5805,388,2025-07-24,Service Quality,positive,1
+5806,196,2025-12-02,Service Quality,positive,2
+5807,117,2025-12-17,Pricing,negative,3
+5808,182,2025-04-26,Wait Time,positive,3
+5809,341,2025-05-20,Service Quality,positive,2
+5810,243,2025-12-24,Pricing,positive,1
+5811,373,2025-04-11,Wait Time,negative,1
+5812,328,2025-02-07,Service Quality,positive,3
+5813,394,2025-10-23,Pricing,neutral,2
+5814,316,2025-07-28,Staff Friendliness,neutral,1
+5815,309,2025-12-26,Wait Time,positive,3
+5816,293,2025-01-07,Service Quality,positive,1
+5817,297,2025-06-04,Service Quality,neutral,1
+5818,167,2025-10-12,Pricing,positive,2
+5819,104,2025-09-22,Wait Time,negative,2
+5820,125,2025-01-27,Pricing,negative,2
+5821,222,2025-05-03,Service Quality,positive,2
+5822,105,2025-09-29,Pricing,positive,3
+5823,145,2025-01-05,Staff Friendliness,positive,3
+5824,380,2025-04-21,Product Selection,positive,3
+5825,123,2025-03-26,Product Selection,positive,1
+5826,222,2025-03-11,Service Quality,positive,1
+5827,412,2025-12-19,Pricing,positive,1
+5828,336,2025-12-23,Pricing,positive,3
+5829,288,2025-10-22,Wait Time,negative,3
+5830,196,2025-11-16,Staff Friendliness,positive,3
+5831,374,2025-08-26,Staff Friendliness,positive,2
+5832,353,2025-05-12,Pricing,neutral,2
+5833,423,2025-01-23,Product Selection,negative,2
+5834,247,2025-05-25,Product Selection,negative,3
+5835,247,2025-02-16,Pricing,positive,1
+5836,386,2025-03-03,Service Quality,neutral,3
+5837,381,2025-11-19,Product Selection,positive,2
+5838,372,2025-05-25,Wait Time,positive,2
+5839,304,2025-03-27,Staff Friendliness,positive,3
+5840,290,2025-11-12,Wait Time,positive,2
+5841,127,2025-07-14,Pricing,neutral,1
+5842,221,2025-08-04,Staff Friendliness,positive,1
+5843,259,2025-08-18,Product Selection,positive,1
+5844,252,2025-03-20,Staff Friendliness,negative,2
+5845,308,2025-06-30,Service Quality,positive,1
+5846,288,2025-02-06,Product Selection,positive,2
+5847,202,2025-04-28,Service Quality,positive,3
+5848,426,2025-02-18,Service Quality,positive,2
+5849,317,2025-08-14,Service Quality,positive,3
+5850,132,2025-05-11,Pricing,positive,2
+5851,139,2025-06-17,Wait Time,positive,2
+5852,327,2025-12-30,Product Selection,positive,2
+5853,236,2025-12-15,Pricing,positive,2
+5854,340,2025-08-24,Product Selection,positive,1
+5855,394,2025-09-26,Service Quality,neutral,3
+5856,395,2025-06-03,Product Selection,positive,3
+5857,308,2025-06-19,Product Selection,positive,2
+5858,164,2025-06-15,Product Selection,positive,3
+5859,411,2025-12-10,Staff Friendliness,positive,3
+5860,336,2025-01-04,Staff Friendliness,positive,2
+5861,340,2025-05-05,Service Quality,neutral,3
+5862,345,2025-02-15,Staff Friendliness,neutral,3
+5863,236,2025-11-25,Wait Time,negative,1
+5864,389,2025-11-05,Wait Time,positive,2
+5865,322,2025-04-08,Staff Friendliness,positive,1
+5866,410,2025-12-16,Staff Friendliness,positive,1
+5867,208,2025-07-27,Product Selection,negative,2
+5868,233,2025-10-15,Service Quality,positive,1
+5869,265,2025-07-22,Wait Time,neutral,2
+5870,293,2025-12-01,Product Selection,negative,1
+5871,233,2025-05-02,Wait Time,positive,3
+5872,182,2025-06-23,Wait Time,neutral,3
+5873,173,2025-12-18,Service Quality,positive,1
+5874,112,2025-12-19,Product Selection,positive,1
+5875,134,2025-04-27,Staff Friendliness,neutral,1
+5876,365,2025-04-19,Pricing,positive,2
+5877,354,2025-09-26,Service Quality,neutral,1
+5878,412,2025-09-05,Service Quality,neutral,2
+5879,265,2025-05-18,Service Quality,positive,3
+5880,276,2025-01-30,Wait Time,negative,2
+5881,266,2025-11-08,Staff Friendliness,positive,3
+5882,136,2025-04-24,Wait Time,positive,1
+5883,116,2025-07-21,Service Quality,neutral,2
+5884,226,2025-04-05,Wait Time,neutral,2
+5885,421,2025-09-10,Wait Time,negative,2
+5886,340,2025-02-08,Staff Friendliness,positive,2
+5887,360,2025-07-25,Service Quality,negative,2
+5888,345,2025-08-15,Service Quality,negative,1
+5889,207,2025-05-02,Product Selection,positive,2
+5890,118,2025-03-28,Pricing,neutral,3
+5891,358,2025-05-28,Pricing,positive,1
+5892,120,2025-06-02,Staff Friendliness,neutral,3
+5893,128,2025-05-19,Wait Time,negative,1
+5894,446,2025-07-07,Staff Friendliness,positive,3
+5895,186,2025-03-12,Staff Friendliness,positive,2
+5896,392,2025-08-09,Service Quality,neutral,1
+5897,108,2025-07-27,Service Quality,positive,1
+5898,361,2025-07-26,Pricing,neutral,2
+5899,311,2025-08-18,Service Quality,positive,2
+5900,262,2025-10-28,Product Selection,positive,1

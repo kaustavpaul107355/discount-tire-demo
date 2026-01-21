@@ -1,0 +1,6 @@
+promo_id,promo_name,start_date,end_date,discount_type,discount_value,applies_to_category,channel
+9001,Winter Safety Event,2025-02-13,2025-03-14,Percent,10.0,Tire,Online
+9002,Wheel Upgrade Week,2025-05-18,2025-06-28,Percent,15.0,Wheel,InStore
+9003,Service Bundle,2025-08-22,2025-10-03,Fixed,20.0,Service,Online
+9004,Accessory Add-On,2025-01-11,2025-01-25,Fixed,10.0,Accessory,InStore
+9005,Spring Road Trip,2025-07-28,2025-09-09,Percent,12.0,Tire,Online

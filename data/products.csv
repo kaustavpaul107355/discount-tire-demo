@@ -1,0 +1,13 @@
+product_id,product_name,category,list_price
+1,AllSeason Radial A/S,Tire,120.0
+2,HighPerformance ZR,Tire,260.0
+3,Truck Terrain LT,Tire,210.0
+4,Eco Touring,Tire,140.0
+5,WinterGrip Ice,Tire,180.0
+6,Wheel Alloy 18in,Wheel,185.0
+7,Wheel Sport 20in,Wheel,260.0
+8,TPMS Sensor Accessory,Accessory,40.0
+9,Lug Nut Kit,Accessory,25.0
+10,Wiper Blades Premium,Accessory,30.0
+11,Tire Rotation Service,Service,0.0
+12,Flat Repair Service,Service,0.0
