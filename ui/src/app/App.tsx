@@ -9,6 +9,7 @@ const RevenueAnalytics = lazy(() => import("@/app/components/RevenueAnalytics").
 const Operations = lazy(() => import("@/app/components/Operations").then(m => ({ default: m.Operations })));
 const CustomerInsights = lazy(() => import("@/app/components/CustomerInsights").then(m => ({ default: m.CustomerInsights })));
 const MapView = lazy(() => import("@/app/components/MapView").then(m => ({ default: m.MapView })));
+const TireCare = lazy(() => import("@/app/components/TireCare").then(m => ({ default: m.TireCare })));
 
 type InputState = "idle" | "listening" | "processing" | "responded";
 
@@ -224,6 +225,12 @@ export default function App() {
         return (
           <Suspense fallback={<LoadingFallback />}>
             <MapView />
+          </Suspense>
+        );
+      case "tirecare":
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <TireCare />
           </Suspense>
         );
       default:

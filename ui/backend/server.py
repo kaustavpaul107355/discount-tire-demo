@@ -583,6 +583,9 @@ class AppHandler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_POST(self) -> None:
+        if self.path == "/api/knowledge-assistant":
+            self._handle_knowledge_assistant()
+            return
         if self.path != "/api/genie/query":
             self._send_json(404, {"error": "Not found"})
             return
@@ -661,6 +664,83 @@ class AppHandler(BaseHTTPRequestHandler):
             self._send_json(200, {"summary": summary, "table": table})
         except Exception:  # pragma: no cover
             logger.exception("Unhandled error processing Genie query.")
+            self._send_json(500, {"error": "An unexpected error occurred. Please try again."})
+
+    def _handle_knowledge_assistant(self) -> None:
+        """Handle queries to the Tire Care knowledge assistant agent."""
+        try:
+            content_length = int(self.headers.get("Content-Length", "0"))
+            payload = json.loads(self.rfile.read(content_length) or "{}")
+            question = payload.get("question", "").strip()
+            if not question:
+                self._send_json(400, {"error": "Question cannot be empty."})
+                return
+
+            host = os.getenv("DATABRICKS_HOST")
+            # Try to get a dedicated token for serving endpoints, fall back to Genie token, then SQL token
+            token = os.getenv("DATABRICKS_TOKEN_FOR_SERVING") or os.getenv("DATABRICKS_TOKEN_FOR_GENIE") or os.getenv("DATABRICKS_TOKEN_FOR_SQL")
+            endpoint_url = os.getenv("KNOWLEDGE_ASSISTANT_ENDPOINT")
+            
+            if not host or not token:
+                logger.error("Missing Databricks configuration for knowledge assistant")
+                self._send_json(500, {"error": "Missing Databricks configuration."})
+                return
+            
+            # Default to the provided endpoint if not in env
+            if not endpoint_url:
+                endpoint_url = f"https://{host}/serving-endpoints/ka-d3d321f4-endpoint/invocations"
+            
+            logger.info(f"Calling knowledge assistant endpoint: {endpoint_url}")
+            
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json"
+            }
+            
+            # Call the knowledge assistant agent endpoint
+            # Format for agent/v1/responses: requires "input" field with message array
+            request_payload = {
+                "input": [
+                    {
+                        "role": "user",
+                        "content": question
+                    }
+                ]
+            }
+            
+            status_code, response_data = api_request(
+                endpoint_url,
+                "POST",
+                request_payload,
+                headers
+            )
+            
+            if status_code != 200:
+                logger.error(f"Knowledge assistant request failed: {status_code}, response: {response_data}")
+                error_msg = response_data.get("error_code", "Unknown error")
+                self._send_json(status_code, {"error": f"Failed to reach knowledge assistant: {error_msg}"})
+                return
+            
+            # Extract response from agent output
+            # Agent endpoints return: {"output": [{"type": "message", "content": [...]}]}
+            output_array = response_data.get("output", [])
+            
+            response_text = ""
+            if output_array and len(output_array) > 0:
+                # Extract content from the first output message
+                content_array = output_array[0].get("content", [])
+                # Concatenate all text pieces from content array
+                text_pieces = [item.get("text", "") for item in content_array if item.get("type") == "output_text"]
+                response_text = "".join(text_pieces).strip()
+            
+            if not response_text:
+                response_text = "No response from assistant."
+                logger.warning(f"Unexpected response format from agent: {response_data}")
+            
+            self._send_json(200, {"response": response_text})
+            
+        except Exception:  # pragma: no cover
+            logger.exception("Unhandled error processing knowledge assistant query.")
             self._send_json(500, {"error": "An unexpected error occurred. Please try again."})
 
     def do_GET(self) -> None:

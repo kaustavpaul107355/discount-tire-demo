@@ -1,4 +1,4 @@
-import { Home, TrendingUp, Package, Users, Map } from "lucide-react";
+import { Home, TrendingUp, Package, Users, Map, LifeBuoy } from "lucide-react";
 
 interface Tab {
   id: string;
@@ -17,6 +17,7 @@ const tabs: Tab[] = [
   { id: "operations", label: "Operations", icon: <Package className="w-4 h-4" /> },
   { id: "customers", label: "Customer Insights", icon: <Users className="w-4 h-4" /> },
   { id: "map", label: "Store Map", icon: <Map className="w-4 h-4" /> },
+  { id: "tirecare", label: "Tire Care & Safety", icon: <LifeBuoy className="w-4 h-4" /> },
 ];
 
 const tabColors = {
@@ -25,6 +26,7 @@ const tabColors = {
   operations: { bg: "from-purple-400/90 to-purple-500/90", text: "text-white", shadow: "shadow-purple-300/50" },
   customers: { bg: "from-pink-400/90 to-pink-500/90", text: "text-white", shadow: "shadow-pink-300/50" },
   map: { bg: "from-teal-400/90 to-teal-500/90", text: "text-white", shadow: "shadow-teal-300/50" },
+  tirecare: { bg: "from-orange-400/90 to-orange-500/90", text: "text-white", shadow: "shadow-orange-300/50" },
 };
 
 export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {

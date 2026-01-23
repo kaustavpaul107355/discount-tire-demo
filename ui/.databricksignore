@@ -1,0 +1,56 @@
+# Node.js dependencies (not needed - only dist/ is needed)
+node_modules/
+.npm/
+.pnpm-store/
+
+# Development files
+src/
+.vite/
+*.test.ts
+*.test.tsx
+test/
+tests/
+__tests__/
+
+# Build configs (not needed after build)
+vite.config.ts
+vitest.config.ts
+postcss.config.mjs
+tsconfig*.json
+
+# Documentation
+README.md
+guidelines/
+ATTRIBUTIONS.md
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Package manager files (not needed after npm install)
+package.json
+package-lock.json
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+.cache/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
