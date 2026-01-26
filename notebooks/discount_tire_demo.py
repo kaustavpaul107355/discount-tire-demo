@@ -44,6 +44,17 @@ feedback_topics_df = spark.read.csv(f"{base_path}/feedback_topics.csv", header=T
 inventory_movements_df = spark.read.csv(f"{base_path}/inventory_movements.csv", header=True, inferSchema=True)
 store_kpis_df = spark.read.csv(f"{base_path}/store_kpis.csv", header=True, inferSchema=True)
 
+# Drop existing tables first to avoid schema conflicts
+tables_to_drop = [
+    "customers", "products", "sales", "inventory", "services", "stores",
+    "promotions", "appointments", "surveys", "feedback_topics",
+    "inventory_movements", "store_kpis"
+]
+
+for table in tables_to_drop:
+    spark.sql(f"DROP TABLE IF EXISTS {table}")
+
+# Now write all tables
 customers_df.write.mode("overwrite").saveAsTable("customers")
 products_df.write.mode("overwrite").saveAsTable("products")
 sales_df.write.mode("overwrite").saveAsTable("sales")
@@ -57,6 +68,8 @@ feedback_topics_df.write.mode("overwrite").saveAsTable("feedback_topics")
 inventory_movements_df.write.mode("overwrite").saveAsTable("inventory_movements")
 store_kpis_df.write.mode("overwrite").saveAsTable("store_kpis")
 
+print("✅ All 12 tables created successfully!")
+
 # COMMAND ----------
 
 # MAGIC %md
@@ -66,6 +79,10 @@ store_kpis_df.write.mode("overwrite").saveAsTable("store_kpis")
 # MAGIC `CREATE METRIC VIEW` statements.
 
 # COMMAND ----------
+
+# Drop existing views first
+spark.sql("DROP VIEW IF EXISTS vw_sales_enriched")
+spark.sql("DROP VIEW IF EXISTS vw_revenue_growth")
 
 spark.sql(
     """
@@ -115,6 +132,10 @@ spark.sql(
     GROUP BY date_trunc('month', date)
     """
 )
+
+print("✅ Views created successfully!")
+print("  - vw_sales_enriched")
+print("  - vw_revenue_growth")
 
 # COMMAND ----------
 

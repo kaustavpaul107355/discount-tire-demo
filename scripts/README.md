@@ -28,6 +28,53 @@ For more control, run each step individually:
 
 ## 📜 Scripts
 
+### `sync-data-to-volume.sh` ⭐ NEW
+**Purpose**: Syncs local CSV files to Databricks Volume
+
+**What it does**:
+1. Uploads all CSV files from `data/` to Databricks Volume
+2. Shows progress for each file with size
+3. Verifies uploads
+4. Optionally triggers notebook to refresh Delta tables
+
+**Usage**:
+```bash
+./scripts/sync-data-to-volume.sh
+```
+
+**What it uploads**:
+- All `*.csv` files from `../data/` directory
+- Destination: `/Volumes/kaustavpaul_demo/dtc_demo/dtc_files/data/`
+
+**Interactive prompts**:
+- After successful upload, asks if you want to refresh tables
+- Optionally runs the setup notebook to reload data
+
+**Output**:
+```
+📤 Syncing Data to Databricks Volume
+Found 12 CSV file(s) to upload
+
+⬆️  Uploading customers.csv (25KB)...
+✅ Uploaded customers.csv
+
+⬆️  Uploading products.csv (2KB)...
+✅ Uploaded products.csv
+...
+✅ Successfully uploaded: 12 file(s)
+
+Would you like to refresh the Delta tables now? (y/n)
+```
+
+**Expected time**: ~30 seconds (depends on file sizes)
+
+**When to use**:
+- After editing CSV files locally
+- When testing new data scenarios
+- Before deploying dashboard updates that depend on data changes
+
+---
+
 ### `build-deploy-bundle.sh`
 **Purpose**: Creates a clean deployment bundle
 

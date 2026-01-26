@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Mic, Send, Volume2, Loader2 } from "lucide-react";
+import { Mic, Send, Volume2, VolumeX, Loader2, RotateCcw } from "lucide-react";
 
 interface AIInteractionPanelProps {
   inputState: "idle" | "listening" | "processing" | "responded";
@@ -10,9 +10,11 @@ interface AIInteractionPanelProps {
     rows: Array<Array<string | null>>;
   } | null;
   prefillText?: string | null;
+  isSpeaking?: boolean;
   onQuerySubmit: (query: string) => void;
   onVoiceInput: () => void;
   onSpeak: (text: string) => void;
+  onReset: () => void;
 }
 
 export function AIInteractionPanel({
@@ -21,9 +23,11 @@ export function AIInteractionPanel({
   aiResponse,
   aiTable,
   prefillText,
+  isSpeaking,
   onQuerySubmit,
   onVoiceInput,
   onSpeak,
+  onReset,
 }: AIInteractionPanelProps) {
   const [inputValue, setInputValue] = useState("");
 
@@ -255,9 +259,18 @@ export function AIInteractionPanel({
             </div>
             <button
               onClick={() => aiResponse && onSpeak(aiResponse)}
-              className="p-2 rounded-lg hover:bg-white/50 transition-colors"
+              className={`p-2 rounded-lg transition-all ${
+                isSpeaking 
+                  ? "bg-red-100 hover:bg-red-200 animate-pulse" 
+                  : "hover:bg-white/50"
+              }`}
+              title={isSpeaking ? "Stop reading" : "Read aloud"}
             >
-              <Volume2 className="w-5 h-5 text-blue-600" />
+              {isSpeaking ? (
+                <VolumeX className="w-5 h-5 text-red-600" />
+              ) : (
+                <Volume2 className="w-5 h-5 text-blue-600" />
+              )}
             </button>
           </div>
 
@@ -298,6 +311,22 @@ export function AIInteractionPanel({
               </div>
             </div>
           )}
+
+          {/* Reset Button */}
+          <div className="mt-6 pt-4 border-t border-blue-100">
+            <button
+              onClick={onReset}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium 
+                text-gray-600 hover:text-gray-900 
+                bg-white/80 hover:bg-white
+                border border-gray-200 hover:border-gray-300
+                rounded-lg shadow-sm hover:shadow-md
+                transition-all duration-200"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Reset
+            </button>
+          </div>
         </div>
       )}
     </div>

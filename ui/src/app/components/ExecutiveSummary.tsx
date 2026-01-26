@@ -12,9 +12,11 @@ interface ExecutiveSummaryProps {
     rows: Array<Array<string | null>>;
   } | null;
   prefillText?: string | null;
+  isSpeaking?: boolean;
   onQuerySubmit: (query: string) => void;
   onVoiceInput: () => void;
   onSpeak: (text: string) => void;
+  onReset: () => void;
 }
 
 export function ExecutiveSummary({
@@ -23,9 +25,11 @@ export function ExecutiveSummary({
   aiQuestion,
   aiTable,
   prefillText,
+  isSpeaking,
   onQuerySubmit,
   onVoiceInput,
   onSpeak,
+  onReset,
 }: ExecutiveSummaryProps) {
   return (
     <div className="space-y-8">
@@ -35,9 +39,11 @@ export function ExecutiveSummary({
         aiResponse={aiResponse}
         aiTable={aiTable}
         prefillText={prefillText}
+        isSpeaking={isSpeaking}
         onQuerySubmit={onQuerySubmit}
         onVoiceInput={onVoiceInput}
         onSpeak={onSpeak}
+        onReset={onReset}
       />
       <FollowUpQuestions onQuestionClick={onQuerySubmit} />
 

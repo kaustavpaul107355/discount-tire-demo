@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Star, Users, ThumbsUp, MessageSquare } from "lucide-react";
+import { StatCardSkeleton, ChartSkeleton } from "@/app/components/LoadingSkeleton";
 
 const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EC4899"];
 const chartTickStyle = { fill: "#6b7280", fontSize: 11, fontFamily: "Inter, system-ui, sans-serif" };
@@ -152,13 +153,42 @@ export function CustomerInsights() {
   const formatNumber = (value: number | null) =>
     value === null ? "—" : value.toLocaleString(undefined, { maximumFractionDigits: 0 });
 
+  if (isLoading) {
+    return (
+      <div className="space-y-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-gray-900">Customer Insights & Satisfaction</h2>
+          <div className="text-xs text-blue-600 animate-pulse">Loading live customer insights...</div>
+        </div>
+        
+        {/* Skeleton Customer Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+        </div>
+
+        {/* Skeleton Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ChartSkeleton />
+          <ChartSkeleton />
+        </div>
+        <div className="grid grid-cols-1 gap-6">
+          <ChartSkeleton />
+          <ChartSkeleton />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-semibold text-gray-900">Customer Insights & Satisfaction</h2>
           <div className="text-xs text-gray-500">
-            {isLoading ? "Loading live customer insights..." : lastUpdated ? `Last updated ${lastUpdated.toLocaleTimeString()}` : ""}
+            {lastUpdated ? `Last updated ${lastUpdated.toLocaleTimeString()}` : ""}
           </div>
         </div>
         

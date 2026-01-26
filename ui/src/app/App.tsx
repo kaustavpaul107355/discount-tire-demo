@@ -29,8 +29,9 @@ export default function App() {
   const [aiTable, setAiTable] = useState<GenieResponse["table"]>(null);
   const [aiQuestion, setAiQuestion] = useState<string | null>(null);
   const [voiceDraft, setVoiceDraft] = useState<string | null>(null);
-  const [isTabTransitioning, setIsTabTransitioning] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const voiceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleQuerySubmit = async (query: string) => {
     setInputState("processing");
@@ -62,6 +63,18 @@ export default function App() {
     }
   };
 
+  const handleReset = () => {
+    // Stop any ongoing speech
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+    
+    // Clear AI response
+    setAiResponse(null);
+    setAiTable(null);
+    setAiQuestion(null);
+    setInputState("idle");
+  };
+
   const handleVoiceInput = () => {
     const SpeechRecognitionImpl =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -75,29 +88,54 @@ export default function App() {
     const recognition = new SpeechRecognitionImpl();
     recognition.lang = "en-US";
     recognition.interimResults = true;
+    recognition.continuous = true; // Enable continuous listening
     recognition.maxAlternatives = 3;
 
+    let finalTranscript = "";
+
     recognition.onresult = (event) => {
-      let transcript = "";
+      let interimTranscript = "";
+      
       for (let i = event.resultIndex; i < event.results.length; i += 1) {
-        transcript += event.results[i][0].transcript;
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + " ";
+        } else {
+          interimTranscript += transcript;
+        }
       }
-      transcript = transcript.trim();
-      if (transcript) {
-        setVoiceDraft(transcript);
-      }
-      if (event.results[event.results.length - 1]?.isFinal) {
-        setInputState("idle");
-        recognition.stop();
+
+      const currentTranscript = (finalTranscript + interimTranscript).trim();
+      if (currentTranscript) {
+        setVoiceDraft(currentTranscript);
+        
+        // Clear existing timeout
+        if (voiceTimeoutRef.current) {
+          clearTimeout(voiceTimeoutRef.current);
+        }
+        
+        // Set new timeout: stop after 2 seconds of silence
+        voiceTimeoutRef.current = setTimeout(() => {
+          if (recognitionRef.current) {
+            recognitionRef.current.stop();
+            setInputState("idle");
+          }
+        }, 2000);
       }
     };
 
     recognition.onerror = () => {
       setInputState("idle");
+      if (voiceTimeoutRef.current) {
+        clearTimeout(voiceTimeoutRef.current);
+      }
     };
 
     recognition.onend = () => {
       setInputState((prev) => (prev === "listening" ? "idle" : prev));
+      if (voiceTimeoutRef.current) {
+        clearTimeout(voiceTimeoutRef.current);
+      }
     };
 
     recognitionRef.current?.stop();
@@ -123,12 +161,21 @@ export default function App() {
     return english || voices[0] || null;
   };
 
-  const splitForSpeech = (text: string) =>
-    text
-      .replace(/\s+/g, " ")
-      .split(/(?<=[.!?])\s+/)
-      .map((part) => part.trim())
-      .filter(Boolean);
+  const cleanTextForSpeech = (text: string): string => {
+    return text
+      // Remove markdown bold/italic
+      .replace(/\*\*([^*]+)\*\*/g, "$1")
+      .replace(/\*([^*]+)\*/g, "$1")
+      // Remove special characters that sound awkward
+      .replace(/[;]/g, ",") // Replace semicolons with commas for natural pause
+      .replace(/[:]/g, ".") // Replace colons with periods for pause
+      .replace(/[—–]/g, " to ") // Replace em/en dashes with "to"
+      .replace(/[-]/g, " ") // Replace hyphens with space
+      .replace(/[`]/g, "") // Remove backticks
+      .replace(/[\[\]{}()]/g, "") // Remove brackets
+      .replace(/\s+/g, " ") // Normalize whitespace
+      .trim();
+  };
 
   const handleSpeak = (text: string) => {
     if (!("speechSynthesis" in window)) {
@@ -136,56 +183,62 @@ export default function App() {
       return;
     }
 
+    // If already speaking, stop it
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
     window.speechSynthesis.cancel();
     const voices = window.speechSynthesis.getVoices();
     const voice = pickPreferredVoice(voices);
     
-    // Enhanced text processing: add natural pauses at punctuation
-    const processedText = text
-      .replace(/([.!?])\s+/g, "$1... ") // Add pause after sentence-ending punctuation
-      .replace(/([,;:])\s+/g, "$1. "); // Add slight pause after commas, semicolons, colons
+    // Clean text for more natural speech
+    const cleanedText = cleanTextForSpeech(text);
     
-    const segments = splitForSpeech(processedText);
-
-    const speakSegment = (index: number) => {
-      if (index >= segments.length) {
-        return;
-      }
-      const utterance = new SpeechSynthesisUtterance(segments[index]);
-      utterance.lang = "en-US";
-      utterance.rate = 0.9; // Slightly slower for more natural cadence
-      utterance.pitch = 1.0; // Neutral pitch sounds more natural
-      utterance.volume = 0.9; // Slightly softer volume
-      if (voice) {
-        utterance.voice = voice;
-      }
-      // Add a small pause between segments for better flow
-      utterance.onend = () => {
-        setTimeout(() => speakSegment(index + 1), 150);
-      };
-      window.speechSynthesis.speak(utterance);
+    // Speak the entire text at once - TTS engine handles punctuation pauses naturally
+    const utterance = new SpeechSynthesisUtterance(cleanedText);
+    utterance.lang = "en-US";
+    utterance.rate = 0.95; // Slightly slower for clarity
+    utterance.pitch = 1.0; // Neutral pitch
+    utterance.volume = 0.9; // Slightly softer
+    
+    if (voice) {
+      utterance.voice = voice;
+    }
+    
+    setIsSpeaking(true);
+    
+    utterance.onend = () => {
+      setIsSpeaking(false);
     };
-
-    speakSegment(0);
+    
+    utterance.onerror = () => {
+      setIsSpeaking(false);
+    };
+    
+    window.speechSynthesis.speak(utterance);
   };
 
   useEffect(() => {
-    return () => recognitionRef.current?.stop();
+    return () => {
+      recognitionRef.current?.stop();
+      if (voiceTimeoutRef.current) {
+        clearTimeout(voiceTimeoutRef.current);
+      }
+      window.speechSynthesis.cancel();
+    };
   }, []);
-
-  useEffect(() => {
-    // Trigger fade out/blur when tab changes
-    setIsTabTransitioning(true);
-    // Keep in transitioning state briefly, then fade in
-    const timer = setTimeout(() => setIsTabTransitioning(false), 100);
-    return () => clearTimeout(timer);
-  }, [activeTab]);
 
   const renderTabContent = () => {
     // Loading fallback for lazy-loaded components
     const LoadingFallback = () => (
       <div className="flex items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+        </div>
       </div>
     );
 
@@ -198,9 +251,11 @@ export default function App() {
             aiTable={aiTable}
             aiQuestion={aiQuestion}
             prefillText={voiceDraft}
+            isSpeaking={isSpeaking}
             onQuerySubmit={handleQuerySubmit}
             onVoiceInput={handleVoiceInput}
             onSpeak={handleSpeak}
+            onReset={handleReset}
           />
         );
       case "revenue":
@@ -244,13 +299,7 @@ export default function App() {
       <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       
       <main className="max-w-7xl mx-auto px-6 py-8">
-        <div 
-          className={`transition-all duration-300 ease-in-out ${
-            isTabTransitioning 
-              ? 'opacity-0 blur-sm scale-98' 
-              : 'opacity-100 blur-0 scale-100'
-          }`}
-        >
+        <div className="animate-fadeIn">
           {renderTabContent()}
         </div>
       </main>

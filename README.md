@@ -1,724 +1,384 @@
-# Discount Tire Executive Brief - Comprehensive Documentation
+# Discount Tire Executive Dashboard
 
-## 📋 Table of Contents
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [API Documentation](#api-documentation)
-- [Development](#development)
-- [Testing](#testing)
-- [Performance](#performance)
-- [Deployment](#deployment)
-- [Recent Updates](#recent-updates)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
+**AI-Powered Executive Analytics Platform for Discount Tire**
+
+[![Databricks](https://img.shields.io/badge/Databricks-Apps-FF3621?logo=databricks)](https://databricks.com)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python)](https://www.python.org/)
 
 ---
 
-## 🎯 Project Overview
+## 📊 Overview
 
-An AI-powered executive dashboard for Discount Tire built on the Databricks platform. This application provides real-time business intelligence through natural language queries, interactive visualizations, and geospatial analytics—all powered by Unity Catalog data and Databricks Genie.
+A modern executive dashboard leveraging Databricks AI (Genie) and Unity Catalog to provide real-time insights across revenue, operations, customer satisfaction, and store performance. Built with React 18, TypeScript, and deployed as a Databricks App.
 
-**Tech Stack:**
-- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS
-- **Backend**: Python HTTP server with connection pooling
-- **AI**: Databricks Genie for natural language queries
-- **Data**: Unity Catalog (Delta Lake tables/views)
-- **Maps**: Leaflet + OpenStreetMap
-- **Charts**: Recharts
-- **Testing**: Vitest + Testing Library
+**Key Features:**
+- 🎤 **Voice-powered AI queries** with natural language processing
+- 🗣️ **Text-to-speech responses** for accessibility
+- 📈 **Real-time analytics** with live data from Unity Catalog
+- 🗺️ **Interactive store maps** with performance metrics
+- 💬 **Knowledge Assistant** for tire care and safety guidance
+- 🎨 **Beautiful glassmorphism UI** with smooth animations
 
----
-
-## ✨ Features
-
-### AI-Powered Analytics
-- **Natural Language Queries**: Ask questions in plain English via Databricks Genie
-- **Voice Input**: Hands-free querying with speech recognition
-- **Text-to-Speech**: Natural voice readout of responses with enhanced cadence
-
-### Real-Time Dashboards
-- **Key Metrics**: Revenue, growth, satisfaction, units sold, inventory risk
-- **Executive Summary**: High-level KPIs with trend indicators
-- **Revenue Analytics**: Revenue by category, monthly trends, YTD performance
-- **Operations**: Inventory health, store performance, operational efficiency
-- **Customer Insights**: Satisfaction scores, feedback analysis, survey data
-- **Store Map**: Interactive geospatial view with performance metrics
-
-### User Experience
-- **Modern UI**: Glassmorphism design with smooth transitions
-- **Responsive**: Works on desktop, tablet, and mobile
-- **Authenticated**: Pulls real user info from Databricks App context
-- **Accessibility**: Voice input, keyboard navigation, screen reader friendly
-
-### Performance Optimizations
-- **Gzip Compression**: 70-80% reduction in response sizes
-- **Connection Pooling**: 50-70% faster SQL queries
-- **Code Splitting**: 40-50% faster initial page load
-- **Multi-Layer Caching**: Intelligent TTL-based caching
-- **Lazy Loading**: Dynamic imports for route-based components
+**Live Dashboard:** [View App](https://dtc-exec-view-app-1444828305810485.aws.databricksapps.com)
 
 ---
 
 ## 🏗️ Architecture
 
-### High-Level Architecture
-```
-┌─────────────────────────────────────────────────────────┐
-│                     User Browser                        │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │ React UI    │  │ Voice Input  │  │  Leaflet Map │  │
-│  │ (Lazy Load) │  │ (Web Speech) │  │  (OSM Tiles) │  │
-│  └─────────────┘  └──────────────┘  └──────────────┘  │
-└─────────────────────────────────────────────────────────┘
-                           ↕ HTTPS (gzip)
-┌─────────────────────────────────────────────────────────┐
-│              Databricks App (Python Backend)            │
-│  ┌──────────────────────────────────────────────────┐  │
-│  │  HTTP Server (ThreadingHTTPServer)               │  │
-│  │  - Gzip compression                              │  │
-│  │  - Multi-layer caching (Genie/SQL/Dashboard)    │  │
-│  │  - Rate limiting & semaphores                    │  │
-│  └──────────────────────────────────────────────────┘  │
-│                         ↕                               │
-│  ┌──────────────────┐        ┌──────────────────────┐  │
-│  │ Connection Pool  │        │   Direct SQL         │  │
-│  │ (3 connections)  │────────│   Queries            │  │
-│  └──────────────────┘        └──────────────────────┘  │
-└─────────────────────────────────────────────────────────┘
-                ↕                          ↕
-┌──────────────────────┐    ┌──────────────────────────┐
-│  Databricks Genie    │    │   SQL Warehouse          │
-│  (NL → SQL)          │    │   (Direct Queries)       │
-└──────────────────────┘    └──────────────────────────┘
-                ↕                          ↕
-        ┌────────────────────────────────────────────┐
-        │        Unity Catalog                       │
-        │  kaustavpaul_demo.dtc_demo                │
-        │  - vw_sales_enriched                      │
-        │  - vw_revenue_growth                      │
-        │  - customers, products, stores, etc.      │
-        └────────────────────────────────────────────┘
-```
-
-### Frontend Architecture
-- **Component Structure**: Atomic design pattern
-- **State Management**: React hooks (useState, useEffect)
-- **Routing**: SPA with tab-based navigation
-- **Code Splitting**: Route-level lazy loading
-- **Styling**: Tailwind CSS with custom utilities
-
-### Backend Architecture
-- **Server**: `ThreadingHTTPServer` for concurrent requests
-- **Caching Strategy**:
-  - **Layer 1**: Genie cache (5 min TTL) - API response caching
-  - **Layer 2**: SQL cache (5 min TTL) - Raw query result caching
-  - **Layer 3**: Dashboard cache (2 min TTL) - Processed data caching
-- **Connection Pool**: Thread-safe SQL connection reuse
-- **Rate Limiting**: Semaphore-based Genie API throttling
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+ and npm
-- Python 3.9+
-- Databricks workspace access
-- Databricks SQL Warehouse (running)
-- Databricks Genie space
-
-### Local Development Setup
-
-1. **Clone the repository**
-   ```bash
-   cd /path/to/discount-tire-demo/ui
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment**
-   
-   Copy `app_git.yaml` to `app.yaml` and update with your credentials:
-   ```yaml
-   command: ["python", "backend/server.py"]
-   
-   env:
-     - name: "DATABRICKS_HOST"
-       value: "your-workspace.cloud.databricks.com"
-     - name: "DATABRICKS_SQL_HTTP_PATH"
-       value: "/sql/1.0/warehouses/your-warehouse-id"
-     - name: "DATABRICKS_TOKEN_FOR_SQL"
-       value: "dapi..."
-     - name: "GENIE_SPACE_ID"
-       value: "your-genie-space-id"
-     - name: "DATABRICKS_TOKEN_FOR_GENIE"
-       value: "dapi..."
-   ```
-
-4. **Run development server**
-   ```bash
-   npm run dev
-   ```
-   
-   Access at: http://localhost:5173
-
-5. **Run tests**
-   ```bash
-   npm test
-   ```
-
-6. **Build for production**
-   ```bash
-   npm run build
-   ```
-
----
-
-## 📁 Project Structure
-
 ```
 discount-tire-demo/
-├── ui/                                 # Main application
+├── ui/                          # React Frontend
+│   ├── src/app/
+│   │   ├── components/         # UI Components
+│   │   │   ├── ExecutiveSummary.tsx
+│   │   │   ├── RevenueAnalytics.tsx
+│   │   │   ├── CustomerInsights.tsx
+│   │   │   ├── Operations.tsx
+│   │   │   ├── MapView.tsx
+│   │   │   ├── TireCare.tsx        # Knowledge Assistant
+│   │   │   └── LoadingSkeleton.tsx  # Loading states
+│   │   ├── styles/             # CSS & Themes
+│   │   └── App.tsx             # Main app
 │   ├── backend/
-│   │   ├── server.py                  # Main HTTP server (50KB)
-│   │   ├── db_pool.py                 # SQL connection pool
-│   │   ├── validate_genie_outputs.py  # Validation script
-│   │   └── tests/
-│   │       └── test_genie_parsing.py  # Backend tests
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── App.tsx                # Main app with routing
-│   │   │   └── components/
-│   │   │       ├── Header.tsx
-│   │   │       ├── TabNavigation.tsx
-│   │   │       ├── AIInteractionPanel.tsx
-│   │   │       ├── ExecutiveSummary.tsx
-│   │   │       ├── KPIMetrics.tsx
-│   │   │       ├── ChartSection.tsx
-│   │   │       ├── RevenueAnalytics.tsx     # Lazy loaded
-│   │   │       ├── Operations.tsx           # Lazy loaded
-│   │   │       ├── CustomerInsights.tsx     # Lazy loaded
-│   │   │       ├── MapView.tsx              # Lazy loaded
-│   │   │       ├── GovernanceFooter.tsx
-│   │   │       └── ui/                      # shadcn/ui components
-│   │   ├── utils/
-│   │   │   └── formatting.ts          # Shared utilities
-│   │   ├── test/
-│   │   │   ├── setup.ts               # Test configuration
-│   │   │   ├── Header.test.tsx
-│   │   │   ├── TabNavigation.test.tsx
-│   │   │   ├── GovernanceFooter.test.tsx
-│   │   │   └── utils.test.ts
-│   │   ├── assets/                    # Logos and images
-│   │   ├── styles/                    # Global styles
-│   │   └── main.tsx                   # App entry point
-│   ├── dist/                          # Build output (git-ignored)
-│   ├── app.yaml                       # Local/workspace config (git-ignored)
-│   ├── app_git.yaml                   # Sanitized config for git
-│   ├── package.json
-│   ├── vite.config.ts                 # Vite configuration
-│   ├── vitest.config.ts               # Test configuration
-│   └── README.md                      # UI-specific docs
-├── data/                              # Mock data files
-│   ├── customers.csv
-│   ├── products.csv
-│   ├── sales.csv
-│   ├── stores.csv
-│   └── ... (11 CSV files)
+│   │   ├── server.py           # Python backend
+│   │   ├── db_pool.py          # DB connections
+│   │   └── tests/              # Backend tests
+│   ├── dist/                   # Built assets
+│   └── app.yaml               # Databricks App config
+├── data/                       # CSV source files (12 files)
 ├── notebooks/
-│   └── discount_tire_demo.py          # Data setup notebook
-├── generate_mock_data.py              # Data generation script
-├── PHASE_1_SUMMARY.md                 # Phase 1 improvements
-├── OPTIMIZATION_SUMMARY.md            # Code optimization details
-├── PERFORMANCE_TESTING_ROADMAP.md     # Phase 2 roadmap
-└── README.md                          # This file
+│   └── discount_tire_demo.py  # Data ingestion notebook
+├── scripts/                    # Deployment automation
+│   ├── full-deploy.sh         # One-command deployment
+│   ├── sync-data-to-volume.sh # Data upload utility
+│   └── README.md              # Scripts documentation
+└── docs/                       # Project documentation
 ```
 
 ---
 
-## 🔌 API Documentation
+## 🚀 Quick Start
 
-### Authentication
-All API endpoints use Databricks App authentication via headers:
-- `X-Forwarded-Email`: User's email
-- `X-Forwarded-Preferred-Username`: User's display name
+### **Prerequisites**
+- Node.js 18+
+- Python 3.10+
+- Databricks CLI configured
+- Access to Databricks workspace
 
-### Endpoints
+### **1. Local Development**
 
-#### User Information
-```
-GET /api/user
-```
-Returns authenticated user information.
+```bash
+# Clone and install
+cd discount-tire-demo/ui
+npm install
 
-**Response:**
-```json
-{
-  "name": "Kaustav Paul",
-  "email": "kaustav.paul@databricks.com",
-  "role": "Executive Viewer"
-}
+# Start dev server
+npm run dev
+
+# Open http://localhost:5173
 ```
 
-#### Genie Query
-```
-POST /api/genie/query
-Content-Type: application/json
+### **2. Deploy to Databricks**
+
+```bash
+# One-command deployment
+./scripts/full-deploy.sh
+
+# Or step-by-step:
+./scripts/build-deploy-bundle.sh    # Build
+./scripts/deploy-to-workspace.sh    # Upload
+./scripts/deploy-app.sh             # Deploy
 ```
 
-**Request:**
-```json
-{
-  "question": "What is the total revenue for the last quarter?"
-}
-```
+### **3. Sync Data**
 
-**Response:**
-```json
-{
-  "summary": "The total revenue for the last quarter was $76,685.00...",
-  "table": {
-    "columns": ["total_revenue"],
-    "rows": [["76685.00"]]
-  }
-}
-```
+```bash
+# Upload CSV files to Databricks Volume
+./scripts/sync-data-to-volume.sh
 
-#### Dashboard Endpoints
-All dashboard endpoints use GET requests and return cached data:
-
-##### KPIs
-```
-GET /api/dashboard/kpis
-```
-
-**Response:**
-```json
-{
-  "currentMonthLabel": "December 2025",
-  "totalRevenue": 123456.78,
-  "revenueGrowth": 0.153,
-  "avgSatisfaction": 4.2,
-  "tireUnits": 1234,
-  "inventoryRisk": 12
-}
-```
-
-##### Charts
-```
-GET /api/dashboard/charts
-```
-
-##### Revenue Analytics
-```
-GET /api/dashboard/revenue
-```
-
-##### Operations
-```
-GET /api/dashboard/operations
-```
-
-##### Customer Insights
-```
-GET /api/dashboard/customers
-```
-
-##### Store Map
-```
-GET /api/dashboard/map
-```
-
-**Response:**
-```json
-{
-  "stores": [...],
-  "stats": {
-    "totalStores": 25,
-    "totalRevenue": 1234567.89,
-    "avgRevenuePerStore": 49382.72,
-    "topPerformer": "Austin, TX",
-    "lowPerformer": "Portland, OR"
-  }
-}
+# Run notebook to create tables
+# Execute: /Workspace/Users/kaustav.paul@databricks.com/discount-tire-demo/notebooks/discount_tire_demo
 ```
 
 ---
 
-## 💻 Development
+## 📚 Documentation
 
-### Environment Variables
+| Document | Description |
+|----------|-------------|
+| [Deployment Guide](./docs/deployment/DEPLOYMENT_GUIDE.md) | Complete deployment instructions |
+| [Scripts README](./scripts/README.md) | Deployment scripts documentation |
+| [Architecture](./docs/architecture/CODEBASE_ASSESSMENT.md) | Technical architecture overview |
+| [Testing](./TEST_COVERAGE_REPORT.md) | Test coverage and quality metrics |
+| [Code Quality](./docs/development/CODE_QUALITY_ASSESSMENT.md) | Code review and standards |
 
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `DATABRICKS_HOST` | Workspace hostname | - | ✅ |
-| `DATABRICKS_SQL_HTTP_PATH` | SQL Warehouse HTTP path | - | ✅ |
-| `DATABRICKS_TOKEN_FOR_SQL` | PAT for SQL queries | - | ✅ |
-| `GENIE_SPACE_ID` | Genie space identifier | - | ✅ |
-| `DATABRICKS_TOKEN_FOR_GENIE` | PAT for Genie API | - | ✅ |
-| `GENIE_CACHE_TTL_SECONDS` | Genie cache TTL | 300 | ❌ |
-| `SQL_CACHE_TTL_SECONDS` | SQL cache TTL | 300 | ❌ |
-| `DASHBOARD_CACHE_TTL_SECONDS` | Dashboard cache TTL | 120 | ❌ |
-| `GENIE_MAX_CONCURRENT` | Max concurrent Genie requests | 1 | ❌ |
-| `SQL_POOL_SIZE` | Connection pool size | 3 | ❌ |
-| `LOG_LEVEL` | Logging level | INFO | ❌ |
-| `DATABRICKS_INSECURE` | Disable TLS verification | false | ❌ |
+---
 
-### Development Workflow
+## 🎯 Features
 
-1. **Make code changes**
-2. **Run tests**:
-   ```bash
-   npm test
-   ```
-3. **Check linting** (if configured):
-   ```bash
-   npm run lint
-   ```
-4. **Build**:
-   ```bash
-   npm run build
-   ```
-5. **Test locally** (optional)
-6. **Deploy to Databricks** (see Deployment section)
+### **1. Executive Summary (Home Tab)**
+- AI-powered query interface (voice & text)
+- Text-to-speech for responses
+- Follow-up question suggestions
+- Key performance metrics
+- Quick insights charts
 
-### Code Style Guidelines
-- **TypeScript**: Strict mode enabled
-- **React**: Functional components with hooks
-- **CSS**: Tailwind utility classes, avoid custom CSS
-- **Testing**: Test user behavior, not implementation
-- **Documentation**: JSDoc comments for utilities
+### **2. Revenue Analytics**
+- Current month & YTD revenue
+- Monthly trend vs target with realistic synthetic data
+- Revenue by category with Service revenue generation
+- Regional quarterly performance
+
+### **3. Customer Insights**
+- Overall satisfaction scores
+- Net Promoter Score (NPS)
+- Feedback topics with sentiment (positive/neutral/negative)
+- Regional satisfaction trends
+- Service breakdown analysis
+
+### **4. Operations**
+- Inventory tracking by store
+- Stock turnover metrics
+- Critical low-stock alerts
+- Store performance rankings
+
+### **5. Store Maps**
+- Interactive map with 100+ store locations
+- 20 performance metric tiles
+- Store-level highlights
+- Geographic performance analysis
+
+### **6. Tire Care Knowledge Assistant**
+- Chat interface powered by Databricks Knowledge Assistant
+- 6 suggested questions
+- Real-time responses
+- Tire safety and maintenance guidance
+
+---
+
+## 🛠️ Technology Stack
+
+### **Frontend**
+- **React 18** - UI framework
+- **TypeScript 5** - Type safety
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **Recharts** - Data visualization
+- **Leaflet** - Interactive maps
+- **Web Speech API** - Voice input/output
+
+### **Backend**
+- **Python 3.10** - Backend logic
+- **ThreadingHTTPServer** - HTTP server
+- **Databricks SDK** - Unity Catalog integration
+- **Multi-layer caching** - Performance optimization
+
+### **Data & AI**
+- **Databricks Genie** - Natural language queries
+- **Databricks Knowledge Assistant** - Chat AI
+- **Unity Catalog** - Data governance
+- **Delta Lake** - Data storage
+- **SQL Warehouse** - Direct query execution
+
+### **Deployment**
+- **Databricks Apps** - Hosting platform
+- **Bash scripts** - Automated deployment
+- **Databricks CLI** - Workspace management
+
+---
+
+## 📊 Data Sources
+
+**12 CSV Files** → **Unity Catalog Delta Tables**:
+
+| File | Records | Description |
+|------|---------|-------------|
+| `customers.csv` | ~500 | Customer demographics & satisfaction |
+| `products.csv` | 12 | Product catalog (Tires, Wheels, Services, Accessories) |
+| `sales.csv` | ~1,000 | Transaction history |
+| `stores.csv` | 100 | Store locations & details |
+| `inventory.csv` | ~400 | Current stock levels |
+| `services.csv` | ~200 | Service records |
+| `appointments.csv` | ~1,000 | Appointment history |
+| `surveys.csv` | ~1,000 | Customer feedback |
+| `feedback_topics.csv` | ~1,000 | Categorized feedback |
+| `promotions.csv` | 8 | Active promotions |
+| `inventory_movements.csv` | ~2,000 | Stock movements |
+| `store_kpis.csv` | ~300 | Store performance KPIs |
+
+**Location:** `/Volumes/kaustavpaul_demo/dtc_demo/dtc_files/data/`
+
+---
+
+## ⚡ Performance Features
+
+### **Loading Optimizations**
+- ✅ Lazy-loaded components for faster initial load
+- ✅ Skeleton loaders for better perceived performance
+- ✅ Smooth fade-in animations (200ms)
+- ✅ Multi-layer caching (Genie: 300s, SQL: 60s, Dashboard: 30s)
+
+### **UI/UX Enhancements**
+- ✅ No flicker transitions between tabs
+- ✅ Instant visual feedback during data loading
+- ✅ Glassmorphism panels with hover effects
+- ✅ Animated gradient background
+- ✅ Responsive design (mobile-friendly)
+
+### **Bundle Size**
+```
+Main bundle: 588 KB (gzipped: 170 KB)
+Charts: 166 KB (gzipped: 52 KB)
+Total initial: ~755 KB (gzipped: ~222 KB)
+```
+
+---
+
+## 🔧 Configuration
+
+### **Environment Variables** (`ui/app.yaml`)
+
+```yaml
+env:
+  - name: "DATABRICKS_HOST"
+    value: "e2-demo-field-eng.cloud.databricks.com"
+  - name: "DATABRICKS_SQL_HTTP_PATH"
+    value: "/sql/1.0/warehouses/..."
+  - name: "DATABRICKS_TOKEN_FOR_GENIE"
+    valueFrom: "genie-pat"
+  - name: "DATABRICKS_TOKEN_FOR_SERVING"
+    valueFrom: "serving-pat"
+```
+
+### **Cache Configuration** (`ui/backend/server.py`)
+
+```python
+GENIE_CACHE_TTL_SECONDS = 300        # 5 minutes
+SQL_CACHE_TTL_SECONDS = 60           # 1 minute
+DASHBOARD_CACHE_TTL_SECONDS = 30     # 30 seconds
+```
 
 ---
 
 ## 🧪 Testing
 
-### Frontend Tests
 ```bash
 # Run all tests
+cd ui
 npm test
 
-# Run with UI
-npm run test:ui
-
-# Run with coverage
+# With coverage
 npm run test:coverage
+
+# Backend tests
+pytest ui/backend/tests/
+
+# Current Coverage: 68%
 ```
 
-**Test Coverage:**
-- Component rendering: Header, TabNavigation, GovernanceFooter
-- User interactions: clicks, form submissions
-- Utility functions: formatting, data processing
-- **14 tests passing** ✅
+**Test Coverage Report:** [TEST_COVERAGE_REPORT.md](./TEST_COVERAGE_REPORT.md)
 
-### Backend Tests
+---
+
+## 🚢 Deployment
+
+### **Automated Deployment (Recommended)**
+
 ```bash
-# Run Genie parsing tests
-pytest ui/backend/tests/test_genie_parsing.py
-
-# Run with coverage
-pytest --cov=backend ui/backend/tests/
+./scripts/full-deploy.sh
 ```
 
-### Validation Script
-```bash
-# Validate Genie output parsing
-export DATABRICKS_HOST=your-workspace.cloud.databricks.com
-export DATABRICKS_TOKEN_FOR_GENIE=dapi...
-export GENIE_SPACE_ID=your-space-id
-python ui/backend/validate_genie_outputs.py
-```
+**What it does:**
+1. Builds frontend (`npm run build`)
+2. Creates optimized deployment bundle (~1.2MB)
+3. Uploads to Databricks workspace
+4. Deploys as Databricks App
+5. Reports final URL
+
+**Duration:** ~1 minute
+
+### **Manual Deployment**
+
+See [DEPLOYMENT_GUIDE.md](./docs/deployment/DEPLOYMENT_GUIDE.md) for detailed manual steps.
 
 ---
 
-## ⚡ Performance
+## 📈 Recent Improvements
 
-### Optimizations Implemented
+### **Data Enhancements**
+- ✅ Realistic target revenue with quarterly variations
+- ✅ Synthetic Service category revenue (15% of total)
+- ✅ Diverse feedback sentiment (positive/neutral/negative, max 1 negative)
+- ✅ Expanded store-level metrics (20 KPI tiles)
 
-#### Phase 1 (Completed)
-1. **Response Compression (gzip)**
-   - 70-80% reduction in JSON response sizes
-   - Automatic for responses > 1KB
-   - Honors client `Accept-Encoding` header
+### **Performance**
+- ✅ Skeleton loading animations
+- ✅ Eliminated page flicker
+- ✅ Smooth 200ms transitions
+- ✅ Optimized React rendering
 
-2. **SQL Connection Pooling**
-   - 50-70% reduction in query latency
-   - Thread-safe pool with 3 connections (configurable)
-   - Automatic health checks and recovery
-
-3. **Code Splitting (Lazy Loading)**
-   - 40-50% faster initial page load
-   - Route-based dynamic imports
-   - Suspense boundaries with loading states
-
-4. **Frontend Unit Tests**
-   - 14 tests across 4 test files
-   - Automated quality assurance
-   - Foundation for expansion
-
-### Performance Metrics
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Initial Load | ~600ms | ~350ms | 42% faster |
-| Dashboard Refresh | ~800ms | ~300ms | 63% faster |
-| JSON Response Size | ~150KB | ~40KB | 73% smaller |
-| SQL Query Latency | ~200ms | ~80ms | 60% faster |
-| Test Coverage | 0% | 40% | +40% |
-
-### Caching Strategy
-
-```
-┌────────────────────────────────────────┐
-│ Layer 1: Genie Cache (TTL: 5 min)     │
-│ - Caches Genie API responses           │
-│ - Thread-safe with locks                │
-│ - Rate limiting via semaphore           │
-└────────────────────────────────────────┘
-              ↓
-┌────────────────────────────────────────┐
-│ Layer 2: SQL Cache (TTL: 5 min)       │
-│ - Caches raw SQL query results         │
-│ - Shared across endpoints               │
-│ - Reduces warehouse load                │
-└────────────────────────────────────────┘
-              ↓
-┌────────────────────────────────────────┐
-│ Layer 3: Dashboard Cache (TTL: 2 min) │
-│ - Caches processed dashboard data      │
-│ - Per-endpoint granularity              │
-│ - Fastest response time                 │
-└────────────────────────────────────────┘
-```
+### **Features**
+- ✅ Voice input with pause detection
+- ✅ Text-to-speech with punctuation handling
+- ✅ Reset button for AI responses
+- ✅ Knowledge Assistant tab (6 suggested questions)
+- ✅ Data sync utility script
 
 ---
 
-## 🚀 Deployment
+## 🔗 Key Links
 
-### Databricks App Deployment
-
-1. **Build the UI**
-   ```bash
-   cd ui
-   npm run build
-   ```
-
-2. **Upload to workspace**
-   ```bash
-   databricks workspace import-dir ui \
-     /Workspace/Users/<your-email>/discount-tire-demo/ui \
-     --overwrite \
-     --profile <your-profile>
-   ```
-
-3. **Deploy the app**
-   ```bash
-   databricks apps deploy dtc-exec-view-app \
-     --source-code-path /Workspace/Users/<your-email>/discount-tire-demo/ui \
-     --profile <your-profile>
-   ```
-
-4. **Check deployment status**
-   ```bash
-   databricks apps get dtc-exec-view-app --profile <your-profile>
-   ```
-
-5. **Access the app**
-   - URL provided in deployment output
-   - Typically: `https://<app-name>-<id>.databricksapps.com`
-
-### Configuration Management
-
-- **`app.yaml`**: Local/workspace version with actual secrets (git-ignored)
-- **`app_git.yaml`**: Sanitized version with placeholders (tracked in git)
-
-Before git sync:
-```bash
-# Ensure app.yaml is not tracked
-git status | grep app.yaml
-# Should return nothing
-```
-
----
-
-## 📝 Recent Updates
-
-### January 21, 2026 - Code Optimization & Phase 1 Completion
-
-**Code Quality Improvements:**
-- ✅ Fixed critical logger initialization bug
-- ✅ Removed 190 lines of unused code (main.py, ImageWithFallback.tsx)
-- ✅ Created shared utility module (`utils/formatting.ts`)
-- ✅ Enhanced documentation across all files
-- ✅ Improved code organization (constants, comments, structure)
-
-**Performance Enhancements:**
-- ✅ Implemented gzip compression (70-80% reduction)
-- ✅ Added SQL connection pooling (50-70% faster)
-- ✅ Implemented code splitting/lazy loading (40-50% faster initial load)
-- ✅ Created 14 frontend unit tests with Vitest
-
-**Deployment:**
-- ✅ Successfully deployed optimized version
-- ✅ All features tested and working
-- ✅ Zero breaking changes
-
-See detailed summaries:
-- [PHASE_1_SUMMARY.md](PHASE_1_SUMMARY.md) - Phase 1 implementation details
-- [OPTIMIZATION_SUMMARY.md](OPTIMIZATION_SUMMARY.md) - Code optimization details
-- [PERFORMANCE_TESTING_ROADMAP.md](PERFORMANCE_TESTING_ROADMAP.md) - Phase 2 roadmap
-
----
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-#### Charts are blank
-**Symptoms**: Dashboard loads but charts show no data
-
-**Solutions**:
-1. Verify `DATABRICKS_SQL_HTTP_PATH` is configured correctly
-2. Check SQL Warehouse is running
-3. Review browser console for 503 errors
-4. Check server logs for SQL failures:
-   ```bash
-   databricks apps get <app-name> --profile <profile>
-   ```
-
-#### Genie queries fail
-**Symptoms**: Error messages when asking questions
-
-**Solutions**:
-1. Verify `GENIE_SPACE_ID` is correct
-2. Check `DATABRICKS_TOKEN_FOR_GENIE` has proper access
-3. Ensure Genie space has access to required tables
-4. Check for 429 (rate limit) errors - adjust `GENIE_MAX_CONCURRENT`
-
-#### Voice input not working
-**Symptoms**: Microphone button does nothing
-
-**Solutions**:
-1. Verify browser supports Web Speech API (Chrome, Edge, Safari)
-2. Grant microphone permissions when prompted
-3. Check browser console for errors
-4. Try HTTPS connection (required for mic access)
-
-#### App deployment fails
-**Symptoms**: `Error building app` message
-
-**Solutions**:
-1. Verify all required files are present (server.py, app.yaml, dist/)
-2. Check `app.yaml` command points to correct file
-3. Ensure dependencies are installed (package.json)
-4. Review deployment logs for specific errors
-
-#### User info shows mock data
-**Symptoms**: Generic user name/email displayed
-
-**Solutions**:
-1. Ensure app is deployed to Databricks (not running locally)
-2. Verify Databricks App authentication is enabled
-3. Check `X-Forwarded-Email` header is present in requests
+- **Live Dashboard:** https://dtc-exec-view-app-1444828305810485.aws.databricksapps.com
+- **Workspace:** https://e2-demo-field-eng.cloud.databricks.com
+- **Catalog:** `kaustavpaul_demo.dtc_demo`
+- **Volume:** `/Volumes/kaustavpaul_demo/dtc_demo/dtc_files/data`
+- **Notebook:** `/Workspace/Users/kaustav.paul@databricks.com/discount-tire-demo/notebooks/discount_tire_demo`
 
 ---
 
 ## 🤝 Contributing
 
-### Development Process
-1. Create feature branch
-2. Make changes
-3. Write/update tests
-4. Run test suite
-5. Build and verify
-6. Submit for review
-7. Deploy after approval
+### **Code Style**
+- Follow TypeScript/React best practices
+- Use Tailwind CSS for styling
+- Add tests for new features
+- Update documentation
 
-### Code Review Checklist
-- [ ] All tests passing
-- [ ] Build successful
-- [ ] No linter errors
-- [ ] Documentation updated
-- [ ] No console errors
-- [ ] Performance impact assessed
-- [ ] Backward compatible
-
-### Git Workflow
+### **Commit Workflow**
 ```bash
-# Create feature branch
-git checkout -b feature/your-feature-name
-
-# Make changes and commit
+# Make changes
 git add .
-git commit -m "feat: description of changes"
-
-# Push to remote
-git push origin feature/your-feature-name
-
-# Create pull request
+git commit -m "feat: description"
+git push origin main
 ```
 
 ---
 
-## 📞 Support & Contact
+## 📝 License
 
-For questions, issues, or feature requests:
-- **Project**: Discount Tire Executive Brief
-- **Platform**: Databricks
-- **Team**: Field Engineering
-- **Contact**: Databricks Field Engineering team
+Internal Databricks Field Engineering Demo
 
 ---
 
-## 📄 License
+## 👥 Team
 
-This demo is provided as-is for demonstration purposes.
-
----
-
-## 🎯 Quick Reference
-
-### Most Common Commands
-```bash
-# Development
-npm install              # Install dependencies
-npm run dev             # Start dev server
-npm test                # Run tests
-npm run build           # Build for production
-
-# Deployment
-databricks workspace import-dir ui /Workspace/Users/<email>/discount-tire-demo/ui --overwrite --profile <profile>
-databricks apps deploy dtc-exec-view-app --source-code-path /Workspace/Users/<email>/discount-tire-demo/ui --profile <profile>
-databricks apps get dtc-exec-view-app --profile <profile>
-
-# Testing
-npm test                # Run frontend tests
-npm run test:ui         # Run with UI
-npm run test:coverage   # With coverage
-pytest ui/backend/tests # Run backend tests
-```
-
-### Key Files
-- `ui/backend/server.py` - Main server
-- `ui/src/app/App.tsx` - Main React component
-- `ui/app.yaml` - Local configuration
-- `ui/app_git.yaml` - Git-tracked configuration template
-- `ui/package.json` - Dependencies and scripts
-- `ui/vitest.config.ts` - Test configuration
-
-### URLs
-- **App**: https://dtc-exec-view-app-1444828305810485.aws.databricksapps.com
-- **Workspace**: https://e2-demo-field-eng.cloud.databricks.com
+**Maintainer:** Kaustav Paul (kaustav.paul@databricks.com)  
+**Organization:** Databricks Field Engineering
 
 ---
 
-**Repository**: https://github.com/kaustavpaul107355/discount-tire-demo  
-**Last Updated**: January 21, 2026  
-**Version**: 2.0 (Optimized)  
-**Status**: Production Ready ✅
+## 🎓 Learning Resources
+
+- [Databricks Apps Documentation](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html)
+- [Genie API Guide](https://docs.databricks.com/en/genie/api-guide.html)
+- [Unity Catalog](https://docs.databricks.com/en/data-governance/unity-catalog/index.html)
+- [React Documentation](https://react.dev)
+- [Tailwind CSS](https://tailwindcss.com)
+
+---
+
+**Last Updated:** January 26, 2026  
+**Version:** 1.0.0  
+**Status:** ✅ Production Ready

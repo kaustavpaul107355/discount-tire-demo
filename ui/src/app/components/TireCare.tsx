@@ -72,6 +72,8 @@ export function TireCare() {
     "What is the proper tire pressure?",
     "When should I replace my tires?",
     "How do I check tire tread depth?",
+    "What causes uneven tire wear?",
+    "How long do tires typically last?",
   ];
 
   return (
@@ -86,7 +88,7 @@ export function TireCare() {
             <h2 className="text-2xl font-semibold text-gray-900 mb-2">Tire Care and Safety</h2>
             <p className="text-sm text-gray-700 leading-relaxed">
               This guide provides an understanding of the many factors essential to the proper care and 
-              service of passenger and light truck tires. This booklet is not all inclusive. Questions 
+              service of passenger and light truck tires. This information is not all inclusive. Questions 
               pertaining to specific products and/or vehicle fitments should be addressed to the vehicle 
               manufacturer, tire manufacturer or tire dealer.
             </p>
@@ -178,7 +180,6 @@ export function TireCare() {
 
             {/* Suggested Questions - Always Visible */}
             <div className="flex flex-wrap gap-2">
-              <span className="text-xs text-gray-500">Suggested questions:</span>
               {suggestedQuestions.map((question, idx) => (
                 <button
                   key={idx}

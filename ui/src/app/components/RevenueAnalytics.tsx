@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { LineChart, Line, BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { ComposedChart, Line, BarChart, Bar, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { DollarSign, TrendingUp, Calendar, MapPin } from "lucide-react";
+import { StatCardSkeleton, ChartSkeleton } from "@/app/components/LoadingSkeleton";
 
 const chartTickStyle = { fill: "#6b7280", fontSize: 11, fontFamily: "Inter, system-ui, sans-serif" };
 const legendStyle = { fontSize: "12px", fontFamily: "Inter, system-ui, sans-serif" };
@@ -133,17 +134,43 @@ export function RevenueAnalytics() {
   const formatPercent = (value: number | null) =>
     value === null ? "—" : `${(value * 100).toFixed(1)}%`;
 
+  if (isLoading) {
+    return (
+      <div className="space-y-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-gray-900">Revenue Performance</h2>
+          <div className="text-xs text-blue-600 animate-pulse">Loading live revenue...</div>
+        </div>
+        
+        {/* Skeleton Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+        </div>
+
+        {/* Skeleton Charts */}
+        <div className="grid grid-cols-1 gap-6">
+          <ChartSkeleton />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ChartSkeleton />
+            <ChartSkeleton />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-semibold text-gray-900">Revenue Performance</h2>
           <div className="text-xs text-gray-500">
-            {isLoading
-              ? "Loading live revenue..."
-              : lastUpdated
-                ? `Last updated ${lastUpdated.toLocaleTimeString()}`
-                : ""}
+            {lastUpdated
+              ? `Last updated ${lastUpdated.toLocaleTimeString()}`
+              : ""}
           </div>
         </div>
         {stats.currentMonthLabel && (
@@ -182,7 +209,7 @@ export function RevenueAnalytics() {
         <div className="glass-panel rounded-xl p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Revenue Trend vs Target</h3>
           <ResponsiveContainer width="100%" height={350}>
-            <AreaChart data={monthlyRevenueData}>
+            <ComposedChart data={monthlyRevenueData}>
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
@@ -220,7 +247,7 @@ export function RevenueAnalytics() {
                 dot={false}
                 name="Last Year ($)"
               />
-            </AreaChart>
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
 

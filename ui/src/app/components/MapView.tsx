@@ -86,6 +86,8 @@ export function MapView() {
     const revenuePerUnit = totalUnits ? totalRevenue / totalUnits : 0;
     const topRevenueStore = [...markers].sort((a, b) => b.revenueValue - a.revenueValue)[0];
     const topUnitsStore = [...markers].sort((a, b) => b.unitsValue - a.unitsValue)[0];
+    const bottomRevenueStore = [...markers].sort((a, b) => a.revenueValue - b.revenueValue)[0];
+    const bottomUnitsStore = [...markers].sort((a, b) => a.unitsValue - b.unitsValue)[0];
 
     const revenueByState = markers.reduce<Record<string, number>>((acc, row) => {
       const key = row.state || "Unknown";
@@ -97,14 +99,36 @@ export function MapView() {
       acc[key] = (acc[key] || 0) + (row.revenueValue || 0);
       return acc;
     }, {});
+    const unitsByState = markers.reduce<Record<string, number>>((acc, row) => {
+      const key = row.state || "Unknown";
+      acc[key] = (acc[key] || 0) + (row.unitsValue || 0);
+      return acc;
+    }, {});
+    const unitsByRegion = markers.reduce<Record<string, number>>((acc, row) => {
+      const key = row.store_region || "Unknown";
+      acc[key] = (acc[key] || 0) + (row.unitsValue || 0);
+      return acc;
+    }, {});
 
     const topState = Object.entries(revenueByState).sort((a, b) => b[1] - a[1])[0];
     const topRegion = Object.entries(revenueByRegion).sort((a, b) => b[1] - a[1])[0];
+    const topStateUnits = Object.entries(unitsByState).sort((a, b) => b[1] - a[1])[0];
+    const topRegionUnits = Object.entries(unitsByRegion).sort((a, b) => b[1] - a[1])[0];
+    
+    const totalStates = Object.keys(revenueByState).length;
+    const totalRegions = Object.keys(revenueByRegion).length;
+    const avgRevenuePerState = totalStates ? totalRevenue / totalStates : 0;
+    const avgRevenuePerRegion = totalRegions ? totalRevenue / totalRegions : 0;
+    
+    const highPerformers = markers.filter(m => m.revenueValue > avgRevenue).length;
+    const lowPerformers = markers.filter(m => m.revenueValue < avgRevenue * 0.7).length;
+    const medianRevenue = [...markers].sort((a, b) => a.revenueValue - b.revenueValue)[Math.floor(markers.length / 2)]?.revenueValue || 0;
 
     return [
       { label: "Total Stores", value: totalStores.toLocaleString() },
       { label: "Total Revenue", value: `$${totalRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}` },
       { label: "Avg Revenue / Store", value: `$${avgRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}` },
+      { label: "Median Revenue / Store", value: `$${medianRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}` },
       { label: "Total Units", value: totalUnits.toLocaleString() },
       { label: "Avg Units / Store", value: avgUnits.toLocaleString(undefined, { maximumFractionDigits: 0 }) },
       {
@@ -116,6 +140,14 @@ export function MapView() {
         value: topUnitsStore ? topUnitsStore.store_name : "—",
       },
       {
+        label: "Lowest Store (Revenue)",
+        value: bottomRevenueStore ? bottomRevenueStore.store_name : "—",
+      },
+      {
+        label: "Lowest Store (Units)",
+        value: bottomUnitsStore ? bottomUnitsStore.store_name : "—",
+      },
+      {
         label: "Top State (Revenue)",
         value: topState ? `${topState[0]} $${topState[1].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—",
       },
@@ -124,8 +156,36 @@ export function MapView() {
         value: topRegion ? `${topRegion[0]} $${topRegion[1].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—",
       },
       {
+        label: "Top State (Units)",
+        value: topStateUnits ? `${topStateUnits[0]} ${topStateUnits[1].toLocaleString()}` : "—",
+      },
+      {
+        label: "Top Region (Units)",
+        value: topRegionUnits ? `${topRegionUnits[0]} ${topRegionUnits[1].toLocaleString()}` : "—",
+      },
+      {
         label: "Revenue / Unit",
         value: `$${revenuePerUnit.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+      },
+      {
+        label: "Active States",
+        value: `${totalStates} states`,
+      },
+      {
+        label: "Active Regions",
+        value: `${totalRegions} regions`,
+      },
+      {
+        label: "Avg Revenue / State",
+        value: `$${avgRevenuePerState.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+      },
+      {
+        label: "High Performers",
+        value: `${highPerformers} stores (>${Math.round(avgRevenue / 1000)}K)`,
+      },
+      {
+        label: "Low Performers",
+        value: `${lowPerformers} stores (<${Math.round(avgRevenue * 0.7 / 1000)}K)`,
       },
     ];
   }, [markers]);

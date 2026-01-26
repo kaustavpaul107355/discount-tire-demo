@@ -9,6 +9,7 @@ const questions = [
   "What is the average customer satisfaction score for sales?",
   "What is the monthly distribution of total revenue over time?",
   "Show revenue by month",
+  "Show sales by quarter",
 ];
 
 const questionColors = [
@@ -16,6 +17,7 @@ const questionColors = [
   { border: "border-green-400", shadow: "shadow-green-200/70", hover: "hover:shadow-green-300" },
   { border: "border-purple-400", shadow: "shadow-purple-200/70", hover: "hover:shadow-purple-300" },
   { border: "border-pink-400", shadow: "shadow-pink-200/70", hover: "hover:shadow-pink-300" },
+  { border: "border-orange-400", shadow: "shadow-orange-200/70", hover: "hover:shadow-orange-300" },
 ];
 
 export function FollowUpQuestions({ onQuestionClick }: FollowUpQuestionsProps) {

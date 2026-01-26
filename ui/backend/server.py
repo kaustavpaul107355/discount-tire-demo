@@ -35,8 +35,8 @@ except ImportError:
 BASE_DIR = Path(__file__).resolve().parents[1]
 DIST_DIR = BASE_DIR / "dist"
 GENIE_CACHE_TTL_SECONDS = int(os.getenv("GENIE_CACHE_TTL_SECONDS", "300"))
-SQL_CACHE_TTL_SECONDS = int(os.getenv("SQL_CACHE_TTL_SECONDS", "300"))
-DASHBOARD_CACHE_TTL_SECONDS = int(os.getenv("DASHBOARD_CACHE_TTL_SECONDS", "120"))
+SQL_CACHE_TTL_SECONDS = int(os.getenv("SQL_CACHE_TTL_SECONDS", "60"))  # Reduced to 60 seconds
+DASHBOARD_CACHE_TTL_SECONDS = int(os.getenv("DASHBOARD_CACHE_TTL_SECONDS", "30"))  # Reduced to 30 seconds
 GENIE_MAX_CONCURRENT = int(os.getenv("GENIE_MAX_CONCURRENT", "1"))
 
 # Cache stores
@@ -748,6 +748,9 @@ class AppHandler(BaseHTTPRequestHandler):
             if self.path == "/api/user":
                 self._handle_user()
                 return
+            if self.path == "/api/cache/clear":
+                self._handle_cache_clear()
+                return
             if self.path == "/api/dashboard/kpis":
                 self._handle_kpis()
                 return
@@ -783,6 +786,22 @@ class AppHandler(BaseHTTPRequestHandler):
             return
 
         self._send_file(DIST_DIR / "index.html")
+    
+    def _handle_cache_clear(self) -> None:
+        """Clear all caches to force fresh data retrieval"""
+        try:
+            with _GENIE_CACHE_LOCK:
+                _GENIE_CACHE.clear()
+            with _SQL_CACHE_LOCK:
+                _SQL_CACHE.clear()
+            with _DASHBOARD_CACHE_LOCK:
+                _DASHBOARD_CACHE.clear()
+            logger.info("All caches cleared successfully")
+            self._send_json(200, {"message": "All caches cleared successfully"})
+        except Exception as e:
+            logger.exception("Error clearing caches")
+            self._send_json(500, {"error": str(e)})
+    
     def _get_genie_context(self) -> tuple[str, Dict[str, str]]:
         host = os.getenv("DATABRICKS_HOST")
         token = os.getenv("DATABRICKS_TOKEN_FOR_GENIE")
@@ -917,7 +936,36 @@ class AppHandler(BaseHTTPRequestHandler):
                 return
             monthly_sql = (
                 "SELECT month, revenue, "
-                "revenue * 1.03 AS target, revenue * 0.92 AS last_year "
+                # Generate realistic target with base + seasonal variation + trend
+                "CAST(("
+                "  CASE "
+                "    WHEN EXTRACT(QUARTER FROM month) = 1 THEN 24500 "
+                "    WHEN EXTRACT(QUARTER FROM month) = 2 THEN 26000 "
+                "    WHEN EXTRACT(QUARTER FROM month) = 3 THEN 27500 "
+                "    WHEN EXTRACT(QUARTER FROM month) = 4 THEN 25500 "
+                "  END "
+                # Add monthly variation based on month number (deterministic but varied)
+                "  + (EXTRACT(MONTH FROM month) * 150) "
+                # Add some sine-wave pattern for realism
+                "  + (CAST(EXTRACT(MONTH FROM month) AS INT) % 3 * 400) "
+                # Small adjustment based on day of month for uniqueness
+                "  - (CAST(EXTRACT(DAY FROM month) AS INT) * 20)"
+                ") AS DECIMAL(10, 2)) AS target, "
+                # Generate realistic last year with different pattern
+                "CAST(("
+                "  revenue * 0.88 "  # Base: 88% of current (12% YoY growth)
+                # Add variation that differs from current year
+                "  + (EXTRACT(MONTH FROM month) * 100) "
+                # Different seasonal pattern than current year
+                "  - (CAST(EXTRACT(MONTH FROM month) AS INT) % 4 * 300) "
+                # Add month-specific variation
+                "  + CASE EXTRACT(MONTH FROM month) "
+                "      WHEN 1 THEN -500 WHEN 2 THEN 200 WHEN 3 THEN -300 "
+                "      WHEN 4 THEN 400 WHEN 5 THEN -100 WHEN 6 THEN 300 "
+                "      WHEN 7 THEN -200 WHEN 8 THEN 500 WHEN 9 THEN 100 "
+                "      WHEN 10 THEN -400 WHEN 11 THEN 200 WHEN 12 THEN 600 "
+                "    END"
+                ") AS DECIMAL(10, 2)) AS last_year "
                 "FROM (SELECT *, MAX(month) OVER() AS max_month "
                 "FROM kaustavpaul_demo.dtc_demo.vw_revenue_growth) t "
                 "WHERE month >= add_months(date_trunc('month', max_month), -5) "
@@ -931,9 +979,24 @@ class AppHandler(BaseHTTPRequestHandler):
                 "ORDER BY store_region, quarter(date)"
             )
             category_sql = (
-                "SELECT category, SUM(total_amount) AS amount "
-                "FROM kaustavpaul_demo.dtc_demo.vw_sales_enriched "
-                "GROUP BY category "
+                # Get revenue by category, with synthetic Service revenue
+                "WITH base_revenue AS ("
+                "  SELECT category, SUM(total_amount) AS amount "
+                "  FROM kaustavpaul_demo.dtc_demo.vw_sales_enriched "
+                "  GROUP BY category"
+                "), "
+                "total_revenue AS ("
+                "  SELECT SUM(amount) AS total FROM base_revenue"
+                ") "
+                "SELECT "
+                "  b.category, "
+                "  CASE "
+                # Generate realistic Service revenue: 15% of total if Service has no/low data
+                "    WHEN b.category = 'Service' AND b.amount < 1000 "
+                "      THEN CAST((SELECT total * 0.15 FROM total_revenue) AS DECIMAL(10, 2)) "
+                "    ELSE CAST(b.amount AS DECIMAL(10, 2)) "
+                "  END AS amount "
+                "FROM base_revenue b "
                 "ORDER BY amount DESC"
             )
             stats_sql = (
@@ -1128,7 +1191,21 @@ class AppHandler(BaseHTTPRequestHandler):
             )
             feedback_topics_sql = (
                 "SELECT category AS topic, "
-                "CASE WHEN AVG(satisfaction_score) >= 4.4 THEN 'positive' ELSE 'neutral' END AS sentiment, "
+                "CASE "
+                # Tire: Always positive (high satisfaction)
+                "  WHEN category = 'Tire' THEN 'positive' "
+                # Service: Neutral to slightly negative (only 1 negative allowed)
+                "  WHEN category = 'Service' AND AVG(satisfaction_score) >= 4.0 THEN 'neutral' "
+                "  WHEN category = 'Service' THEN 'negative' "
+                # Wheel: Positive if high satisfaction, neutral otherwise
+                "  WHEN category = 'Wheel' AND AVG(satisfaction_score) >= 4.3 THEN 'positive' "
+                "  WHEN category = 'Wheel' THEN 'neutral' "
+                # Accessory: Neutral
+                "  WHEN category = 'Accessory' THEN 'neutral' "
+                # Default: positive for high scores, neutral otherwise
+                "  WHEN AVG(satisfaction_score) >= 4.5 THEN 'positive' "
+                "  ELSE 'neutral' "
+                "END AS sentiment, "
                 "COUNT(*) AS mentions "
                 "FROM kaustavpaul_demo.dtc_demo.vw_sales_enriched "
                 "GROUP BY category"
@@ -1251,7 +1328,8 @@ class AppHandler(BaseHTTPRequestHandler):
                 "WHEN 'NC' THEN -78.6382 WHEN 'TN' THEN -86.7816 WHEN 'IL' THEN -87.6298 "
                 "WHEN 'OH' THEN -82.9988 ELSE -98.5795 END AS longitude "
                 "FROM kaustavpaul_demo.dtc_demo.stores st "
-                "LEFT JOIN sales_rollup sr ON st.store_id = sr.store_id"
+                "LEFT JOIN sales_rollup sr ON st.store_id = sr.store_id "
+                "LIMIT 20"
             )
             locations = run_direct_sql(store_locations_sql)
             if locations is None:
