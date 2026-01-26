@@ -1,16 +1,32 @@
-import { useEffect, useMemo, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { useEffect, useMemo, useState, lazy, Suspense } from "react";
+import type { MapContainer as MapContainerType } from "react-leaflet";
 
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-});
+// Lazy load map components to reduce initial bundle
+const MapContainer = lazy(() => import("react-leaflet").then(m => ({ default: m.MapContainer })));
+const TileLayer = lazy(() => import("react-leaflet").then(m => ({ default: m.TileLayer })));
+const Marker = lazy(() => import("react-leaflet").then(m => ({ default: m.Marker })));
+const Popup = lazy(() => import("react-leaflet").then(m => ({ default: m.Popup })));
+
+// Lazy load leaflet and CSS
+let leafletModule: typeof import("leaflet") | null = null;
+const loadLeaflet = async () => {
+  if (!leafletModule) {
+    const L = await import("leaflet");
+    await import("leaflet/dist/leaflet.css");
+    const [markerIcon2x, markerIcon, markerShadow] = await Promise.all([
+      import("leaflet/dist/images/marker-icon-2x.png"),
+      import("leaflet/dist/images/marker-icon.png"),
+      import("leaflet/dist/images/marker-shadow.png"),
+    ]);
+    L.default.Icon.Default.mergeOptions({
+      iconRetinaUrl: markerIcon2x.default,
+      iconUrl: markerIcon.default,
+      shadowUrl: markerShadow.default,
+    });
+    leafletModule = L.default;
+  }
+  return leafletModule;
+};
 
 type StoreLocation = {
   store_id: string;
@@ -38,6 +54,11 @@ export function MapView() {
   const [locations, setLocations] = useState<StoreLocation[]>([]);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [mapReady, setMapReady] = useState(false);
+
+  useEffect(() => {
+    loadLeaflet().then(() => setMapReady(true));
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -199,13 +220,15 @@ export function MapView() {
         </div>
       </div>
       <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-gray-200 p-4">
-        <MapContainer center={[39.5, -98.35]} zoom={4} className="h-[520px] w-full rounded-lg">
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {markers.map((location) => (
-            <Marker
+        {mapReady ? (
+          <Suspense fallback={<div className="h-[520px] w-full rounded-lg bg-gray-100 animate-pulse flex items-center justify-center text-gray-500">Loading map...</div>}>
+            <MapContainer center={[39.5, -98.35]} zoom={4} className="h-[520px] w-full rounded-lg">
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {markers.map((location) => (
+                <Marker
               key={`${location.store_id}-${location.state}`}
               position={[location.lat, location.lng]}
             >
@@ -223,7 +246,11 @@ export function MapView() {
               </Popup>
             </Marker>
           ))}
-        </MapContainer>
+            </MapContainer>
+          </Suspense>
+        ) : (
+          <div className="h-[520px] w-full rounded-lg bg-gray-100 animate-pulse flex items-center justify-center text-gray-500">Initializing map...</div>
+        )}
       </div>
       <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Store-Level Highlights</h3>
