@@ -347,6 +347,7 @@ See [DEPLOYMENT_GUIDE.md](./docs/deployment/DEPLOYMENT_GUIDE.md) for detailed ma
 - Update documentation
 
 ### **Commit Workflow**
+- Before pushing, see **[OPTIMIZATION_REVIEW.md](./OPTIMIZATION_REVIEW.md)** for the git check-in checklist (secrets, build, tests).
 ```bash
 # Make changes
 git add .

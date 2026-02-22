@@ -7,7 +7,11 @@ interface Message {
   timestamp: Date;
 }
 
-export function TireCare() {
+interface TireCareProps {
+  endpointName?: string;
+}
+
+export function TireCare({ endpointName }: TireCareProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -79,13 +83,16 @@ export function TireCare() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       {/* Header with Description */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+      <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-white rounded-lg shadow-sm">
-            <Info className="w-6 h-6 text-blue-600" />
+            <Info className="w-6 h-6 text-amber-600" />
           </div>
           <div className="flex-1">
             <h2 className="text-2xl font-semibold text-gray-900 mb-2">Tire Care and Safety</h2>
+            {endpointName && (
+              <p className="text-xs font-mono text-amber-800/90 mb-2">Endpoint: {endpointName}</p>
+            )}
             <p className="text-sm text-gray-700 leading-relaxed">
               This guide provides an understanding of the many factors essential to the proper care and 
               service of passenger and light truck tires. This information is not all inclusive. Questions 
@@ -120,14 +127,14 @@ export function TireCare() {
                   <div
                     className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                       msg.role === "user"
-                        ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md"
+                        ? "bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-md"
                         : "bg-white border border-gray-200 text-gray-800 shadow-sm"
                     }`}
                   >
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                     <p
                       className={`text-xs mt-2 ${
-                        msg.role === "user" ? "text-blue-100" : "text-gray-400"
+                        msg.role === "user" ? "text-amber-100" : "text-gray-400"
                       }`}
                     >
                       {msg.timestamp.toLocaleTimeString()}
@@ -139,7 +146,7 @@ export function TireCare() {
                 <div className="flex justify-start">
                   <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm">
                     <div className="flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                      <Loader2 className="w-4 h-4 animate-spin text-amber-600" />
                       <span className="text-sm text-gray-600">Thinking...</span>
                     </div>
                   </div>
@@ -161,14 +168,14 @@ export function TireCare() {
                 placeholder="Ask about tire care, maintenance, or safety..."
                 disabled={isLoading}
                 className="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 
-                  focus:border-blue-500 focus:ring-2 focus:ring-blue-200 
+                  focus:border-amber-500 focus:ring-2 focus:ring-amber-200 
                   transition-all outline-none disabled:bg-gray-50"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim() || isLoading}
-                className="px-6 py-3 bg-gradient-to-br from-blue-500 to-indigo-600 
-                  hover:from-blue-600 hover:to-indigo-700 
+                className="px-6 py-3 bg-gradient-to-br from-amber-500 to-orange-600 
+                  hover:from-amber-600 hover:to-orange-700 
                   text-white rounded-xl font-medium shadow-md
                   hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed
                   transition-all duration-300 flex items-center gap-2"
@@ -185,8 +192,8 @@ export function TireCare() {
                   key={idx}
                   type="button"
                   onClick={() => setInputValue(question)}
-                  className="px-3 py-1.5 text-xs bg-blue-50 hover:bg-blue-100 
-                    text-blue-700 rounded-full border border-blue-200
+                  className="px-3 py-1.5 text-xs bg-amber-50 hover:bg-amber-100 
+                    text-amber-800 rounded-full border border-amber-200
                     transition-colors duration-200"
                 >
                   {question}

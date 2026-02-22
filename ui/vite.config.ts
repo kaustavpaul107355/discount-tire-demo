@@ -5,15 +5,25 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [
-    // The React and Tailwind plugins are both required for Make, even if
-    // Tailwind is not being actively used – do not remove them
     react(),
     tailwindcss(),
   ],
   resolve: {
     alias: {
-      // Alias @ to the src directory
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/recharts')) return 'recharts'
+          if (id.includes('node_modules/react-leaflet') || id.includes('node_modules/leaflet')) return 'leaflet'
+          if (id.includes('node_modules/react-markdown') || id.includes('node_modules/remark-gfm')) return 'markdown'
+          if (id.includes('node_modules/lucide-react')) return 'lucide'
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
   },
 })

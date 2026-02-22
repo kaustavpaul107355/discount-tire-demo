@@ -12,4 +12,6 @@ env:
   - name: "DATABRICKS_TOKEN_FOR_GENIE"
     value: "REPLACE_ME"
   - name: "KNOWLEDGE_ASSISTANT_ENDPOINT"
-    value: "https://your-workspace.cloud.databricks.com/serving-endpoints/your-endpoint-id/invocations"
+    value: "https://e2-demo-field-eng.cloud.databricks.com/serving-endpoints/ka-14d1da28-endpoint/invocations"
+  - name: "MAS_SUPERVISOR_ENDPOINT"
+    value: "https://e2-demo-field-eng.cloud.databricks.com/serving-endpoints/mas-550372ce-endpoint/invocations"

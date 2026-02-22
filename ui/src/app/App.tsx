@@ -9,7 +9,7 @@ const RevenueAnalytics = lazy(() => import("@/app/components/RevenueAnalytics").
 const Operations = lazy(() => import("@/app/components/Operations").then(m => ({ default: m.Operations })));
 const CustomerInsights = lazy(() => import("@/app/components/CustomerInsights").then(m => ({ default: m.CustomerInsights })));
 const MapView = lazy(() => import("@/app/components/MapView").then(m => ({ default: m.MapView })));
-const TireCare = lazy(() => import("@/app/components/TireCare").then(m => ({ default: m.TireCare })));
+const AIAssistantView = lazy(() => import("@/app/components/AIAssistantView").then(m => ({ default: m.AIAssistantView })));
 
 type InputState = "idle" | "listening" | "processing" | "responded";
 
@@ -67,12 +67,22 @@ export default function App() {
     // Stop any ongoing speech
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
-    
-    // Clear AI response
+    // Stop listening if active
+    recognitionRef.current?.stop();
+    // Clear AI response and voice draft
     setAiResponse(null);
     setAiTable(null);
     setAiQuestion(null);
+    setVoiceDraft(null);
     setInputState("idle");
+  };
+
+  const handleClearInput = () => {
+    setVoiceDraft(null);
+  };
+
+  const handleStopListening = () => {
+    recognitionRef.current?.stop();
   };
 
   const handleVoiceInput = () => {
@@ -114,20 +124,27 @@ export default function App() {
           clearTimeout(voiceTimeoutRef.current);
         }
         
-        // Set new timeout: stop after 2 seconds of silence
+        // Set new timeout: stop after 3 seconds of silence (gives time to finish a thought)
         voiceTimeoutRef.current = setTimeout(() => {
           if (recognitionRef.current) {
             recognitionRef.current.stop();
             setInputState("idle");
           }
-        }, 2000);
+        }, 3000);
       }
     };
 
-    recognition.onerror = () => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       setInputState("idle");
       if (voiceTimeoutRef.current) {
         clearTimeout(voiceTimeoutRef.current);
+      }
+      if (event.error === "not-allowed") {
+        setAiResponse("Microphone access was denied. Allow the site to use your mic and try again.");
+        setInputState("responded");
+      } else if (event.error === "no-speech") {
+        setVoiceDraft(null);
+        // Stay idle; no need to show an error for natural pause/no speech
       }
     };
 
@@ -166,14 +183,16 @@ export default function App() {
       // Remove markdown bold/italic
       .replace(/\*\*([^*]+)\*\*/g, "$1")
       .replace(/\*([^*]+)\*/g, "$1")
-      // Remove special characters that sound awkward
-      .replace(/[;]/g, ",") // Replace semicolons with commas for natural pause
-      .replace(/[:]/g, ".") // Replace colons with periods for pause
-      .replace(/[—–]/g, " to ") // Replace em/en dashes with "to"
-      .replace(/[-]/g, " ") // Replace hyphens with space
-      .replace(/[`]/g, "") // Remove backticks
-      .replace(/[\[\]{}()]/g, "") // Remove brackets
-      .replace(/\s+/g, " ") // Normalize whitespace
+      // Collapse newlines to space so TTS doesn't run words together
+      .replace(/\r?\n+/g, " ")
+      // Replace special characters that sound awkward
+      .replace(/[;]/g, ",")
+      .replace(/[:]/g, ".")
+      .replace(/[—–]/g, " to ")
+      .replace(/[-]/g, " ")
+      .replace(/[`]/g, "")
+      .replace(/[\[\]{}()]/g, "")
+      .replace(/\s+/g, " ")
       .trim();
   };
 
@@ -191,34 +210,41 @@ export default function App() {
     }
 
     window.speechSynthesis.cancel();
-    const voices = window.speechSynthesis.getVoices();
-    const voice = pickPreferredVoice(voices);
-    
-    // Clean text for more natural speech
     const cleanedText = cleanTextForSpeech(text);
-    
-    // Speak the entire text at once - TTS engine handles punctuation pauses naturally
-    const utterance = new SpeechSynthesisUtterance(cleanedText);
-    utterance.lang = "en-US";
-    utterance.rate = 0.95; // Slightly slower for clarity
-    utterance.pitch = 1.0; // Neutral pitch
-    utterance.volume = 0.9; // Slightly softer
-    
-    if (voice) {
-      utterance.voice = voice;
+    if (!cleanedText) {
+      return;
     }
-    
-    setIsSpeaking(true);
-    
-    utterance.onend = () => {
-      setIsSpeaking(false);
+
+    // Wait for voices to be loaded (Chrome loads them asynchronously)
+    const speakWithVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const voice = pickPreferredVoice(voices);
+
+      const utterance = new SpeechSynthesisUtterance(cleanedText);
+      utterance.lang = "en-US";
+      utterance.rate = 0.92; // Slightly slower for clarity
+      utterance.pitch = 1.0;
+      utterance.volume = 0.95;
+
+      if (voice) {
+        utterance.voice = voice;
+      }
+
+      setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
     };
-    
-    utterance.onerror = () => {
-      setIsSpeaking(false);
-    };
-    
-    window.speechSynthesis.speak(utterance);
+
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      speakWithVoice();
+    } else {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.onvoiceschanged = null;
+        speakWithVoice();
+      };
+    }
   };
 
   useEffect(() => {
@@ -256,6 +282,8 @@ export default function App() {
             onVoiceInput={handleVoiceInput}
             onSpeak={handleSpeak}
             onReset={handleReset}
+            onClearInput={handleClearInput}
+            onStopListening={handleStopListening}
           />
         );
       case "revenue":
@@ -282,10 +310,10 @@ export default function App() {
             <MapView />
           </Suspense>
         );
-      case "tirecare":
+      case "supervisor":
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <TireCare />
+            <AIAssistantView />
           </Suspense>
         );
       default:

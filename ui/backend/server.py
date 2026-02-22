@@ -49,16 +49,33 @@ _DASHBOARD_CACHE_LOCK = threading.Lock()
 _GENIE_SEMAPHORE = threading.Semaphore(GENIE_MAX_CONCURRENT)
 
 
-def api_request(url: str, method: str, payload: Optional[Dict[str, Any]], headers: Dict[str, str]) -> tuple[int, Dict[str, Any]]:
+def _endpoint_name_from_url(url: str) -> str:
+    """Extract serving endpoint name from URL, e.g. .../serving-endpoints/ka-14d1da28-endpoint/invocations -> ka-14d1da28-endpoint."""
+    if not url or not url.strip():
+        return ""
+    parts = url.rstrip("/").split("/")
+    for i, part in enumerate(parts):
+        if part == "serving-endpoints" and i + 1 < len(parts):
+            return parts[i + 1] or ""
+    return ""
+
+
+def api_request(
+    url: str,
+    method: str,
+    payload: Optional[Dict[str, Any]],
+    headers: Dict[str, str],
+    timeout: int = 30,
+) -> tuple[int, Dict[str, Any]]:
     data = json.dumps(payload).encode("utf-8") if payload else None
     request = Request(url, data=data, headers=headers, method=method)
     insecure = os.getenv("DATABRICKS_INSECURE", "").strip().lower() in {"1", "true", "yes"}
     try:
         if insecure:
             context = ssl._create_unverified_context()
-            response = urlopen(request, context=context, timeout=30)
+            response = urlopen(request, context=context, timeout=timeout)
         else:
-            response = urlopen(request, timeout=30)
+            response = urlopen(request, timeout=timeout)
         with response:
             body = response.read().decode("utf-8")
             return response.status, json.loads(body) if body else {}
@@ -586,6 +603,9 @@ class AppHandler(BaseHTTPRequestHandler):
         if self.path == "/api/knowledge-assistant":
             self._handle_knowledge_assistant()
             return
+        if self.path == "/api/supervisor":
+            self._handle_supervisor()
+            return
         if self.path != "/api/genie/query":
             self._send_json(404, {"error": "Not found"})
             return
@@ -688,7 +708,7 @@ class AppHandler(BaseHTTPRequestHandler):
             
             # Default to the provided endpoint if not in env
             if not endpoint_url:
-                endpoint_url = f"https://{host}/serving-endpoints/ka-d3d321f4-endpoint/invocations"
+                endpoint_url = f"https://{host}/serving-endpoints/ka-14d1da28-endpoint/invocations"
             
             logger.info(f"Calling knowledge assistant endpoint: {endpoint_url}")
             
@@ -743,8 +763,150 @@ class AppHandler(BaseHTTPRequestHandler):
             logger.exception("Unhandled error processing knowledge assistant query.")
             self._send_json(500, {"error": "An unexpected error occurred. Please try again."})
 
+    def _extract_supervisor_response(self, response_data: Dict[str, Any]) -> str:
+        """Extract full assistant text from MAS/supervisor response (all messages/blocks)."""
+        if not response_data:
+            return ""
+
+        def text_from_content(content: Any) -> str:
+            if isinstance(content, str) and content.strip():
+                return content.strip()
+            if isinstance(content, list):
+                return "".join(
+                    c.get("text", "") for c in content
+                    if c.get("type") in ("output_text", "text") and c.get("text")
+                ).strip()
+            return ""
+
+        parts: List[str] = []
+
+        # Schema 1: ResponsesAgent / ChatAgent — {"messages": [{"role": "assistant", "content": "..."}]}
+        messages = response_data.get("messages", [])
+        if messages:
+            for msg in messages:
+                if msg.get("role") == "assistant":
+                    text = text_from_content(msg.get("content"))
+                    if text:
+                        parts.append(text)
+            if parts:
+                return "\n\n".join(parts)
+
+        # Schema 2: Legacy output — {"output": [{"content": [...]}]} (collect all output items)
+        output_array = response_data.get("output", [])
+        if output_array:
+            for item in output_array:
+                content = item.get("content")
+                text = text_from_content(content)
+                if text:
+                    parts.append(text)
+            if parts:
+                return "\n\n".join(parts)
+
+        # Schema 3: Top-level "content" (StringResponse legacy)
+        if isinstance(response_data.get("content"), str) and response_data["content"].strip():
+            return response_data["content"].strip()
+
+        return ""
+
+    def _handle_supervisor(self) -> None:
+        """Handle queries to the MAS supervisor agent (routes to KA + Genie)."""
+        try:
+            content_length = int(self.headers.get("Content-Length", "0"))
+            payload = json.loads(self.rfile.read(content_length) or "{}")
+            question = payload.get("question", "").strip()
+            if not question:
+                self._send_json(400, {"error": "Question cannot be empty."})
+                return
+
+            host = os.getenv("DATABRICKS_HOST")
+            token = os.getenv("DATABRICKS_TOKEN_FOR_SERVING") or os.getenv("DATABRICKS_TOKEN_FOR_GENIE") or os.getenv("DATABRICKS_TOKEN_FOR_SQL")
+            endpoint_url = os.getenv("MAS_SUPERVISOR_ENDPOINT")
+
+            if not host or not token:
+                logger.error("Missing Databricks configuration for MAS supervisor")
+                self._send_json(500, {"error": "Missing Databricks configuration."})
+                return
+
+            if not endpoint_url:
+                endpoint_url = f"https://{host}/serving-endpoints/mas-550372ce-endpoint/invocations"
+
+            logger.info(f"Calling MAS supervisor endpoint: {endpoint_url}")
+
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json"
+            }
+
+            request_payload = {
+                "input": [
+                    {"role": "user", "content": question}
+                ]
+            }
+
+            # Supervisor can take 60–120s when it routes to Genie (polling) + KA
+            supervisor_timeout = int(os.getenv("MAS_SUPERVISOR_TIMEOUT", "120"))
+            try:
+                status_code, response_data = api_request(
+                    endpoint_url,
+                    "POST",
+                    request_payload,
+                    headers,
+                    timeout=supervisor_timeout,
+                )
+            except Exception as req_err:  # pragma: no cover
+                logger.exception("MAS supervisor request failed: %s", req_err)
+                err_msg = str(req_err).split("\n")[0] if str(req_err) else "connection or timeout error"
+                self._send_json(500, {"error": f"Could not reach supervisor: {err_msg}. Please try again."})
+                return
+
+            if status_code != 200:
+                logger.error("MAS supervisor request failed: status=%s, response=%s", status_code, response_data)
+                error_msg = (
+                    response_data.get("error_code")
+                    or response_data.get("message")
+                    or response_data.get("error")
+                    or "Unknown error"
+                )
+                if isinstance(error_msg, dict):
+                    error_msg = error_msg.get("message", "Unknown error")
+                self._send_json(status_code, {"error": f"Supervisor returned an error: {error_msg}"})
+                return
+
+            response_text = self._extract_supervisor_response(response_data)
+
+            if not response_text:
+                logger.warning("MAS response had no extractable text; keys=%s", list(response_data.keys()) if response_data else None)
+                response_text = "No response from assistant."
+                self._send_json(200, {"response": response_text})
+                return
+
+            self._send_json(200, {"response": response_text})
+
+        except Exception:  # pragma: no cover
+            logger.exception("Unhandled error processing supervisor query.")
+            self._send_json(500, {"error": "An unexpected error occurred. Please try again."})
+
+    def _handle_config(self) -> None:
+        """Return endpoint names used by the app (from env/default), so the UI can display them without hardcoding."""
+        host = os.getenv("DATABRICKS_HOST", "")
+        ka_url = os.getenv("KNOWLEDGE_ASSISTANT_ENDPOINT") or (
+            f"https://{host}/serving-endpoints/ka-14d1da28-endpoint/invocations" if host else ""
+        )
+        mas_url = os.getenv("MAS_SUPERVISOR_ENDPOINT") or (
+            f"https://{host}/serving-endpoints/mas-550372ce-endpoint/invocations" if host else ""
+        )
+        self._send_json(200, {
+            "endpoints": {
+                "tireCare": _endpoint_name_from_url(ka_url),
+                "supervisor": _endpoint_name_from_url(mas_url),
+            },
+        })
+
     def do_GET(self) -> None:
         if self.path.startswith("/api/"):
+            if self.path == "/api/config":
+                self._handle_config()
+                return
             if self.path == "/api/user":
                 self._handle_user()
                 return

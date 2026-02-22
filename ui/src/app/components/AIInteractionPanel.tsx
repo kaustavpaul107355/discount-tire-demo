@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Mic, Send, Volume2, VolumeX, Loader2, RotateCcw } from "lucide-react";
+import { Mic, Send, Volume2, VolumeX, Loader2, RotateCcw, X } from "lucide-react";
 
 interface AIInteractionPanelProps {
   inputState: "idle" | "listening" | "processing" | "responded";
@@ -15,6 +15,8 @@ interface AIInteractionPanelProps {
   onVoiceInput: () => void;
   onSpeak: (text: string) => void;
   onReset: () => void;
+  onClearInput?: () => void;
+  onStopListening?: () => void;
 }
 
 export function AIInteractionPanel({
@@ -28,6 +30,8 @@ export function AIInteractionPanel({
   onVoiceInput,
   onSpeak,
   onReset,
+  onClearInput,
+  onStopListening,
 }: AIInteractionPanelProps) {
   const [inputValue, setInputValue] = useState("");
 
@@ -136,11 +140,13 @@ export function AIInteractionPanel({
     return <div className="space-y-2">{blocks}</div>;
   };
 
+  // Sync voice transcript into input: live-update while listening, or prefill when empty
   useEffect(() => {
-    if (!prefillText) {
+    if (inputState === "listening") {
+      setInputValue(prefillText ?? "");
       return;
     }
-    if (inputState === "listening" || inputValue.trim() === "") {
+    if (prefillText && inputValue.trim() === "") {
       setInputValue(prefillText);
     }
   }, [prefillText, inputState, inputValue]);
@@ -153,22 +159,28 @@ export function AIInteractionPanel({
     }
   };
 
+  const handleClearInput = () => {
+    setInputValue("");
+    onClearInput?.();
+  };
+
   return (
     <div className="space-y-6">
       {/* Input Panel */}
       <div className="glass-panel rounded-2xl p-8">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex items-center gap-4">
-            {/* Voice Button */}
+            {/* Voice Button: tap to start, tap again to stop when listening */}
             <button
               type="button"
-              onClick={onVoiceInput}
-              disabled={inputState === "listening" || inputState === "processing"}
+              onClick={inputState === "listening" ? onStopListening : onVoiceInput}
+              disabled={inputState === "processing"}
               className={`relative flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center transition-all ${
                 inputState === "listening"
-                  ? "bg-red-500 animate-pulse shadow-lg shadow-red-200"
+                  ? "bg-red-500 animate-pulse shadow-lg shadow-red-200 hover:bg-red-600"
                   : "bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg"
               } disabled:opacity-50`}
+              title={inputState === "listening" ? "Click to stop listening" : "Click to speak"}
             >
               {inputState === "listening" && (
                 <span className="absolute inset-0 rounded-full bg-red-400 opacity-30 animate-ping" />
@@ -176,32 +188,49 @@ export function AIInteractionPanel({
               <Mic className="w-7 h-7 text-white" />
             </button>
 
-            {/* Text Input */}
-            <div className="flex-1 relative">
+            {/* Text Input with Clear and Send */}
+            <div className="flex-1 relative flex items-center">
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Ask about revenue, tire sales, inventory health, or customer satisfaction..."
-                disabled={inputState === "listening" || inputState === "processing"}
-                className="w-full px-6 py-4 rounded-xl border-2 border-indigo-400 bg-white/80 backdrop-blur-sm
+                readOnly={inputState === "listening"}
+                disabled={inputState === "processing"}
+                className="w-full pl-6 pr-24 py-4 rounded-xl border-2 border-indigo-400 bg-white/80 backdrop-blur-sm
                   shadow-md shadow-indigo-200/70 
                   focus:border-indigo-500 focus:shadow-lg focus:shadow-indigo-300 focus:scale-[1.01]
                   transition-all duration-300 outline-none 
-                  disabled:bg-gray-50 disabled:border-gray-300 disabled:shadow-gray-200/50"
+                  disabled:bg-gray-50 disabled:border-gray-300 disabled:shadow-gray-200/50
+                  read-only:bg-white/90"
               />
-              {inputValue && (
-                <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg 
-                    bg-gradient-to-br from-indigo-500 to-indigo-600 
-                    hover:from-indigo-600 hover:to-indigo-700 
-                    shadow-md hover:shadow-lg hover:scale-105
-                    text-white transition-all duration-300"
-                >
-                  <Send className="w-5 h-5" />
-                </button>
-              )}
+              <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                {inputValue ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleClearInput}
+                      className="p-2 rounded-lg text-gray-500 hover:text-gray-800 hover:bg-gray-200
+                        transition-all"
+                      title="Clear prompt"
+                      aria-label="Clear prompt"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                    <button
+                      type="submit"
+                      className="p-2 rounded-lg 
+                        bg-gradient-to-br from-indigo-500 to-indigo-600 
+                        hover:from-indigo-600 hover:to-indigo-700 
+                        shadow-md hover:shadow-lg hover:scale-105
+                        text-white transition-all duration-300"
+                      title="Send"
+                    >
+                      <Send className="w-5 h-5" />
+                    </button>
+                  </>
+                ) : null}
+              </div>
             </div>
           </div>
 
@@ -217,7 +246,7 @@ export function AIInteractionPanel({
             {inputState === "listening" && (
               <div className="flex flex-col items-center gap-2">
                 <p className="text-sm text-red-600 font-medium animate-pulse">
-                  🎤 Listening...
+                  🎤 Listening... Click mic again to stop
                 </p>
                 <div className="flex items-end gap-1">
                   {[0, 1, 2, 3, 4].map((index) => (
@@ -259,17 +288,23 @@ export function AIInteractionPanel({
             </div>
             <button
               onClick={() => aiResponse && onSpeak(aiResponse)}
-              className={`p-2 rounded-lg transition-all ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
                 isSpeaking 
-                  ? "bg-red-100 hover:bg-red-200 animate-pulse" 
-                  : "hover:bg-white/50"
+                  ? "bg-red-100 hover:bg-red-200 animate-pulse text-red-700" 
+                  : "hover:bg-white/50 text-blue-600"
               }`}
               title={isSpeaking ? "Stop reading" : "Read aloud"}
             >
               {isSpeaking ? (
-                <VolumeX className="w-5 h-5 text-red-600" />
+                <>
+                  <VolumeX className="w-5 h-5" />
+                  <span className="text-sm font-medium">Stop</span>
+                </>
               ) : (
-                <Volume2 className="w-5 h-5 text-blue-600" />
+                <>
+                  <Volume2 className="w-5 h-5" />
+                  <span className="text-sm font-medium">Read aloud</span>
+                </>
               )}
             </button>
           </div>

@@ -17,6 +17,8 @@ interface ExecutiveSummaryProps {
   onVoiceInput: () => void;
   onSpeak: (text: string) => void;
   onReset: () => void;
+  onClearInput?: () => void;
+  onStopListening?: () => void;
 }
 
 export function ExecutiveSummary({
@@ -30,6 +32,8 @@ export function ExecutiveSummary({
   onVoiceInput,
   onSpeak,
   onReset,
+  onClearInput,
+  onStopListening,
 }: ExecutiveSummaryProps) {
   return (
     <div className="space-y-8">
@@ -44,6 +48,8 @@ export function ExecutiveSummary({
         onVoiceInput={onVoiceInput}
         onSpeak={onSpeak}
         onReset={onReset}
+        onClearInput={onClearInput}
+        onStopListening={onStopListening}
       />
       <FollowUpQuestions onQuestionClick={onQuerySubmit} />
 

@@ -1,9 +1,11 @@
+.DS_Store
 __pycache__/
 *.py[cod]
 
 ui/node_modules/
 ui/dist/
 ui/.vite/
+# Do not commit – contains tokens and env for Databricks App
 ui/app.yaml
 ui_deploy/
 
